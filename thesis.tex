@@ -1,0 +1,32 @@
+%\documentclass[a4paper,12pt]{report}
+\documentclass[12pt,twoside,a4paper]{article}
+\newcommand{\reporttitle}{Title of course}
+\newcommand{\reportauthor}{Zhongxuan Li}
+\newcommand{\reporttype}{Coursework}
+\newcommand{\cid}{your college-id number}
+%include files that load packages and define macros
+\input{includes} % various packages needed for maths etc.
+\input{notation} % short-hand notation and macros
+% front page
+\begin{document}
+\input{titlepage}
+\input{abstract}
+\tableofcontents
+\newpage
+\input{introduction}
+\newpage
+\input{background}
+\newpage
+\input{Implementation}
+\newpage
+\input{DigitalWatermark}
+
+\input{Conclusion}
+\newpage
+\bibliography{citations}
+\bibliographystyle{plain}
+%\input{Appendix} 
+\end{document}
+
+
+
