@@ -1,6 +1,10 @@
 \section{Experiments on Image Source Separation}
-In this section, we turn to use MMCA to separate two-dimensional data and compare the result with the standard FastICA source separation technique. In Figure X,
+In this section, we turn to use MMCA to separate two-dimensional data and compare the result with the standard FastICA source separation technique. \\
 
+In Figure X, (a) and (d) are two source signals, one of which is oscillating textures while another is `boy' image. Curvelet transform is selected as the dictionary for source 1 and discrete consine transform is selected for source 2. Figure X (c) and (d) illustrates the separated image under the presence of 30dB gaussian noise.\\
+
+The correlation coefficient between two sources are 0.07. It makes sense to ignore the correlation of source and ICA applies. We gradually apply noise from 0dB to 30dB. Correlation between source and separated image using MMCA and ICA methods is shown below.
+The results proves the MMCA outperforms FastICA interms of separation quality and robustness.
 
 \begin{figure}[H]
 \centering
@@ -8,3 +12,6 @@ In this section, we turn to use MMCA to separate two-dimensional data and compar
 \caption{Evolution of the correlation coefficient between original and estimated sources as the noise variance varies.}
 \label{imapint1}
 \end{figure}
+
+GMCA is supposed to achieve better separation quality when the mixing sources have similar morphologies. In this experiment, we use two scenery photo and compare GMCA with FastICA. Figure X (c) and (d) are two mixed signals. The result shows that both the two methods achieves good separation quality, but GMCA is slightly better. \\
+In the robustness test, we impose guassian noise from 0dB to 30 dB. Figure X (c) and (d) are two mixed signals contaminated by 30dB noise. We can merely identify the original source from (e) and (f), but (c) and (d) using GMCA still gives acceptable result. It can also be shown in Figure X that noise has a greater effect on FastICA than GMCA. 
