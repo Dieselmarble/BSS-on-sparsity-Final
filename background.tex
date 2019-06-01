@@ -316,6 +316,14 @@ The product $\mathbf{AS}$ can be split into $n\times D$ multichannel morphologic
     \tilde{\varphi}_{ik} = \text{arg} \; \min_{\{\varphi_{ik}\}} \lVert \varphi_{ik}\mathbf{\Phi}_k^T\rVert_{1} + \lambda \; \lVert \mathbf{X}_{i,k} - a^i\varphi_{ik}\rVert_2^2
 \end{equation}
 Similarly to MMCA, GMCA uses the component-wise iterative thresholding algorithm which is summarized as follows. Note the difference notations of morphological components coefficients $\alpha_{ik}$ and mixing matrix coefficients $a^i$
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/mca_gmca.png}
+\caption{Illustration of the image decomposition(top) using MCA and the blind source separation (bottom) using GMCA. For the bottom part, each source is itself a mixture of morphological components(texture and cartoon)}
+\label{Ins_LMM}
+\end{figure}
+
 \newpage
 \begin{algorithm}[H] 
 \label{algFramwork3} 
@@ -338,6 +346,42 @@ Estimation $\tilde{\mathbf{A}}$ and $\tilde{\mathbf{S}}$
 \end{algorithmic}
 \end{algorithm}
 
+\subsubsection{Fast GMCA Algorithm}
+In the last section, we described GMCA algorithm which needs the projection of the residual into the dictionary space at each iteration $\tilde{\alpha}_{ik} = \lambda_{\delta}(r_{ik}\mathbf{\Phi}_k^T)$. Note that the application of $\mathbf{\Phi}_k^T$ has consumed most of the computation power. Thus, GMCA could be very computationally demanding for large scale, high dimensional problems \cite{BobinJ_2007SaMD}. In practice, we apply the an improved version coined fast GMCA by adding some assumptions to the original problem.\\
+
+We assume each row of $\mathbf{\Theta_X}=\mathbf{X}D^T$ stores the decomposition of each observed channels in $D$. And each row of $\mathbf{\Theta_S}=\mathbf{S}D^T$ stores the decomposition of each source. 
+If the supports ($\ell_0$ decompostion) of $\mathbf{X}$ and $\mathbf{S}$ satisfies 
+\begin{equation}
+    \Delta_D(x_i) = \sum_{j=1}^{n}\alpha_{ij}\Delta(s_j)
+\end{equation}
+Then we can rewrite the Lagrangian form \label{GMCAequation} as follows.
+
+\begin{equation}
+    \{\mathbf{\tilde{A},\tilde{S}}\} = \text{Arg} \: 
+    \lVert \mathbf{\Theta_S} \rVert_0 + \lambda \:\lVert \mathbf{\Theta_X} - \mathbf{A\Theta_S} \rVert^2_2
+\label{fast-gmca}
+\end{equation}
+
+To conclude, the fast GMCA algorithm works in the sparse transformed domain and omits the dictionary decomposition process at each iteration. Now write fast GMCA in a step-wise flavour.
+
+\begin{algorithm}[H] 
+\caption{ The numerical algorithm for minimising \ref{MMCAequation2}} 
+\label{alg:Framwork} 
+\begin{algorithmic}
+\REQUIRE ~~\\%Input
+The sources $S$, dictionary $\Phi$, number of morphological components $N$, number of iterations $L_{max}$ and threshold $\delta^{(0)} = k \cdot L_{max}$
+\ENSURE ~~\\ %Output
+Decompose the mixture in transformed domiain an obtain $\mathbf{\Theta_X}$\\
+Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$
+\STATE While each $\delta$ is higher than a given lower threshold $\delta^{(0)}$:
+\STATE \quad - Update $\mathbf{\Theta_S}$ with thresholding operator $\lambda_{\delta}$ and $\mathbf{A}$ is fixed at $h^{th}$ iteration.\\
+\quad \quad $\mathbf{\hat{\Theta}}^{(h+1)}_S = \lambda_{\delta} (A^{\dagger^{(h)}}\mathbf{\Theta_X})$
+\STATE \quad - Update $\mathbf{A}$ by a least-square estimate assuming $\mathbf{\Theta_S}$ is fixed.\\
+\quad \quad $\mathbf{\hat{A}}^{(h+1)} = \mathbf{\Theta_X} \mathbf{\hat{\Theta}_S}^{(h)^T} 
+\mathbf{(\hat{\Theta}_S}^{(h)} \mathbf{\hat{\Theta}_S}^{(h)^T})^{-1}$
+\STATE \quad - Decrease $\delta$.
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Further Research Directions in MCA based BSS}
 In this section, we point out several challenges in recent blind source separation research, and anticipate the further research directions.\\

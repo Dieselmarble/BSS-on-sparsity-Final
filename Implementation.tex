@@ -1,4 +1,7 @@
 \section{Experiments on Image Source Separation}
+
+\subsection{Image Decomposition}
+
 In this section, we turn to use MMCA to separate two-dimensional data and compare the result with the standard FastICA source separation technique. \\
 
 In Figure X, (a) and (d) are two source signals, one of which is oscillating textures while another is `boy' image. Curvelet transform is selected as the dictionary for source 1 and discrete consine transform is selected for source 2. Figure X (c) and (d) illustrates the separated image under the presence of 30dB gaussian noise.\\
@@ -6,12 +9,95 @@ In Figure X, (a) and (d) are two source signals, one of which is oscillating tex
 The correlation coefficient between two sources are 0.07. It makes sense to ignore the correlation of source and ICA applies. We gradually apply noise from 0dB to 30dB. Correlation between source and separated image using MMCA and ICA methods is shown below.
 The results proves the MMCA outperforms FastICA interms of separation quality and robustness.
 
+\begin{center}
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/source1.png}
+\captionof*{figure}{(a)}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/mixed1.png}
+\captionof*{figure}{(c)}
+\end{minipage}
+\hfill
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/separated1.png}
+\captionof*{figure}{(e)}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/source2.png}
+\captionof*{figure}{(b)}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/mixed2.png}
+\captionof*{figure}{(d)}
+\end{minipage}
+\hfill
+\begin{minipage}{0.33\linewidth}
+\includegraphics[width=0.9\linewidth]{images/separated2.png}
+\captionof*{figure}{(f)}
+\end{minipage}
+\hfill
+\caption{(using curvelet and DCT); \textbf{First column}: The origianl sources. \textbf{Second column} mixtures of the initial sources. \textbf{Third column}: souces estimated by FastICA}
+\end{center}
+
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.45\textwidth]{}
+\begin{minipage}{0.5\linewidth}
+\includegraphics[width=0.9\linewidth]{images/MCA_Texture.png}
+\captionof*{figure}{(g)}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\includegraphics[width=0.9\linewidth]{images/MCA_Cartoon.png}
+\captionof*{figure}{(f)}
+\end{minipage}
 \caption{Evolution of the correlation coefficient between original and estimated sources as the noise variance varies.}
 \label{imapint1}
 \end{figure}
 
+\subsection{Blind Image Source Separation}
+
 GMCA is supposed to achieve better separation quality when the mixing sources have similar morphologies. In this experiment, we use two scenery photo and compare GMCA with FastICA. Figure X (c) and (d) are two mixed signals. The result shows that both the two methods achieves good separation quality, but GMCA is slightly better. \\
 In the robustness test, we impose guassian noise from 0dB to 30 dB. Figure X (c) and (d) are two mixed signals contaminated by 30dB noise. We can merely identify the original source from (e) and (f), but (c) and (d) using GMCA still gives acceptable result. It can also be shown in Figure X that noise has a greater effect on FastICA than GMCA. 
+
+
+\begin{figure*}[htbp]
+\centering
+ 
+\subfigure[]{
+    \begin{minipage}[t]{0.33\linewidth}
+        \centering
+        \includegraphics[width=1.651in]{images/barbara_ori.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/boat_ori.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/pakhawaj_ori.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/paraty_ori.png}\\
+        %\caption{fig1}
+    \end{minipage}%
+}%
+\subfigure[]{
+    \begin{minipage}[t]{0.33\linewidth}
+        \centering
+        \includegraphics[width=1.651in]{images/barbara_out.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/boat_out.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/pakhawaj_out.png}\\
+        \vspace{0.02cm}
+        \includegraphics[width=1.651in]{images/paraty_out.png}\\
+        %\caption{fig1}
+    \end{minipage}%
+}%
+ 
+ 
+\centering
+\caption{adad}
+\vspace{-0.2cm}
+\label{fig:compare_fig}
+
+\end{figure*}
