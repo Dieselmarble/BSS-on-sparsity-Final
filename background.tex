@@ -67,58 +67,14 @@ Before applying BSS methods (and after centering), the observed vector $x$ is li
 
 \subsection{BSS Performance Measures}
 \label{perform_metric}
-Here we assume that the source signals $\mathbf{s_i}$ are mutually orthogonal and the noise signals are also mutually orthogonal to each other and to the sources. Then the estimated source $\mathbf{\hat{s}_i}$ has an orthogonal decomposition \cite{performanceMeasure}.
-\begin{equation}
-    \hat{s}_i = \big \langle \hat{s}_i,\frac{s_i}{||s_i||}\big \rangle\frac{s_i}{||s_i||} + e_{interf} + e_{noise} + e_{artif}
-\end{equation}
-where the first term is the contribution to the true source from estimation, we give it a name called $s_{target}$. $e_{interf}$ is the error term due to interference from other sources and $e_{noise}$ accounts for additive noise and $e_{artif}$ is the error term attributed to the numerical artifacts of separation algorithm. \\
 
-For quality assessment, we employ the performance criteria defined in the BSSEVAL toolbox for evaluation of the separated source signals. These criteria are the signal to distortion ratio (SDR), the source to interference ratio (SIR) and the source to artifacts ratio (SAR) \cite{performanceMeasure}. In addition, the conventional signal to noise ratio (SNR), mixing matrix criterion (MMC) and mean square error (MSE) are used particularly for blind image separation. Those performance measurement metrics are defined as follows.
-
-\subsubsection{Source to Distortion Ratio (SDR)}
-The SDR is a global measure distortion that provides an overall separation performance criterion. It measures the general accuracy of how well the estimated source is compared to its targeted true source.
+\subsubsection{Correlation coefficient}
+Correlation coefficient measures the similarity between a recovered source $S^{'}$ and the original source $S$.
 \begin{equation}
-    D_{total} = \frac{||\hat{s_i}||^2 - |\big \langle \hat{s_i},\frac{s_i}{||s_i||}\big \rangle|^2} {|\big \langle \hat{s_i},\frac{s_i}{||s_i||}\big \rangle|^2}
-\end{equation}
-Hence, the Source to Distortion Ratio (SDR) is
-\begin{equation}
-    SNR = 10\log_{10} D^{-1}_{total}
-\end{equation}
-It is worthy note that when the estimate source is orthogonal to the original source, that is $\big \langle \hat{s}_i,s_i \big \rangle = 0$ then $D_{total} = +\infty $. SDR increases when the quality of the estimation increases, with
-less interference, less noise, and fewer artifacts.
-\subsubsection{Source to Interference Ratio (SIR)}
-Although both SIR and SAR measure local performance. 
-SIR mainly measures how well the algorithm does for the suppression of interfering sources \cite{performanceMeasure}.
-\begin{equation}
-    D_{interf} = \frac{||e_{interf}||^2}{|\big\langle \hat{s}_i, \frac{s_i}{||s_i||} \big\rangle |^2}
-\end{equation}
-Source to Interference Ratio (SIR) is hence defined as
-\begin{equation}
-    SIR = 10\log_{10} D^{-1}_{interf}
+    \rho = \frac{\text{cov}(S^{'},S)}{\sigma_x \sigma_y}
 \end{equation}
 
-\subsubsection{Source to Artifact Ratio (SAR)}
-SAR measures the level of numerical artifacts within each estimated source.
-\begin{equation}
-    D_{artif} = \frac{||e_{artif}||^2}
-    {|| \big\langle \hat{s}_i, \frac{s_i}{||s_i||}\big\rangle  \frac{s_i}{||s_i||} + e_{interf} + e_{noise}||^2}
-\end{equation}
-Hence, the SAR is 
-\begin{equation}
-    SAR = 10\log_{10} D^{-1}_{artif}
-\end{equation}
-
-\subsubsection{Signal to Noise Ratio (SNR)}
-Finally, the SNR measures the error due to the additive noise on the sensors. The relative distortion due to additive noise $D_{noise}$ is
-\begin{equation}
-    D_{noise} = \frac{||e_{noise}||^2}{||\big \langle \hat{s_i},\frac{s_i}{||s_i||}\big \rangle||^2}
-\end{equation}
-Hence, the Source to Noise Ratio (SNR) is
-\begin{equation}
-    SNR = 10\log_{10} D^{-1}_{noise}
-\end{equation}
-
-\subsubsection{Mixing Matrix Criterion}
+\subsubsection{Mixing matrix criterion}
 Mixing Matrix Criterion assesses the separation quality due to demixing matrix $\mathbf{A}$, especially in noisy content.
 \begin{equation}
     C_A = ||\mathbf{I_n} - P\tilde{\mathbf{A}}^{+}\mathbf{A} ||
@@ -132,7 +88,7 @@ The classical application of BSS on the cocktail party problem is trying to unde
 \subsubsection{Biomedicine}
 An electroencephalogram (EEG) is a test used to find problems related to electrical activity of the brain. In EEG analysis, different artifacts such as eye-blinking deteriorate its quality. Identification of the various sources from the independent components is thus integral for clinical analysis. An innovative method combining the use of standard BSS techniques and Support Vector Machines (SVM) was applied to solve this problem  \cite{Duda2000PC954544}.
 
-\subsubsection{Image Impainting}
+\subsubsection{Image impainting}
 Filling `holes' in images is an interested and important inverse problem with applications in repairing the old and deteriorated artwork. Based on Morphological Component Analysis, an inpainting algorithm has been proposed  which is capable of filling holes in either texture or cartoon content \cite{ELAD2005340}. The inpainting algorithm is applied on the famous Barbara images and achieve satisfactory result even when there are 80\% missing pixels. 
 \begin{figure}[H]
 \centering
@@ -147,7 +103,7 @@ given on the left.}
 In Code-Division Multiple Access (CDMA), blind separation techniques are used to suppress unintentional multiuser interference (jammer), separate the desired user signals from other users' signals \cite{Raju2006}. BSS also has wide applications in military based telecomm systems which recovers radar reflection from strong intentional interference.
 
 %Similar to the approach that we will be adopting later, the sources are assigned a prior distribution to enhance the performance of the separation process.
-\subsubsection{Financial Time Series}
+\subsubsection{Financial time series}
 BSS is closely related with studying the underlying factors of the financial data and driving mechanisms behind financial time series. In \cite{OjaE2000Icaf} ICA is applied to financial time series data. The data is parallel, representing the simultaneous cash flow at several stores belonging to the same retail chain. The ICA finds the fundamental factors that are common to all stores that affect the cashflow data, although each store responds to these factors in a slightly different manner. Thus, the cashflow effect of the factors specific to any particular store could be revealed.
 %i.e. the effect of the actions taken at the individual stores and in its local environment could be analyzed. %Furthermore, BSS was used to forecast the U.S. real output and inflation variables \cite{YauR2004}. 
 \newpage
@@ -315,7 +271,7 @@ The product $\mathbf{AS}$ can be split into $n\times D$ multichannel morphologic
 \begin{equation}
     \tilde{\varphi}_{ik} = \text{arg} \; \min_{\{\varphi_{ik}\}} \lVert \varphi_{ik}\mathbf{\Phi}_k^T\rVert_{1} + \lambda \; \lVert \mathbf{X}_{i,k} - a^i\varphi_{ik}\rVert_2^2
 \end{equation}
-Similarly to MMCA, GMCA uses the component-wise iterative thresholding algorithm which is summarized as follows. Note the difference notations of morphological components coefficients $\alpha_{ik}$ and mixing matrix coefficients $a^i$
+Similarly to MMCA, GMCA uses the component-wise iterative thresholding algorithm which is summarized as follows. Note the difference notations of morphological components coefficients $\alpha_{ik}$ and mixing matrix coefficients $a^i$.
 
 \begin{figure}[H]
 \centering
@@ -383,7 +339,17 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Further Research Directions in MCA based BSS}
+
+\subsection{Solve the scale and permutation indeterminacy}
+As mentioned in previous sections, BSS methods suffers from ambiguities that the estimated source can be scaled permuted up to any arbitrary order. The solution to this problem is equivalent to an optimal assignment algorithm. An intuitive methods would be comparing the similarity metric (e.g. Euclidean distance) between every estimated source and the original sources. It is easy to see that the complexity is $O(n^2)$. Unfortunately, the optimal assignment may not, in general, be attained in this way \cite{1261953}. In this report, we employ the Kuhn-Munkres Algorithm (also well-known as the Hungarian Algorithm)
+with complexity $O(n^3)$ (n is the number of channels) to calculate the permutation matrix.
+
+
+
+
+
+
+\subsection{Further research directions in MCA based BSS}
 In this section, we point out several challenges in recent blind source separation research, and anticipate the further research directions.\\
 \begin{itemize}
     \item Dictionary Selection for morphological component analysis was empirical. The prevailing dictionaries include wavelets, discrete cosine, ridgelet, curvelet and their derivatives. Due to the complex nature of images, methodology of selecting appropriate dictionary for different  morphological diversities is critical.
