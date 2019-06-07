@@ -108,3 +108,8 @@ In the robustness test, we impose guassian noise from 0dB to 30 dB. Figure X (c)
 \end{minipage}
 \label{imapint1}
 \end{figure}
+
+\subsection{Blind image separation using adaptive dictionary learning}
+In order to obtain enough training samples for dictionary learning, multiple overlapped segments (patches) of the sources are taken. To extract small overlapped patches from the source image. Here, we do not require the prior knowledge of the scaling matrix in front of the true mixing matrix [10], as otherwise required in MMCA and GMCA algorithms.\\
+
+In addition, it is also worth noting that the SparseBSS model, using one dictionary to sparsely represent all the sources will get almost the same performance as using multiple but same-sized dictionaries when the dictionary redundancy d/n is large enough. As a result, it is reasonable to train only one dictionary for all the sources. An obvious advantage of using one dictionary is that the computational cost does not increase when the number of sources increases.
