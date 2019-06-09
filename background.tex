@@ -82,6 +82,9 @@ Mixing Matrix Criterion assesses the separation quality due to demixing matrix $
 
 where $\mathbf{I}$ is the identity matrix, $\mathbf{P}$ is the permutation matrix, and $\tilde{\mathbf{A}}^{+}$ is the pseudo-inverse of the estimated mixing matrix. The mixing matrix criterion is strictly positive, unless the mixing matrix is correctly estimated up to scale and permutation \cite{VAbolghasemi2012}. Low values of $C_A$ then indicate better separation performance.
  
+\subsubsection{Human visual system (HVS)}
+Most of out work in this report focus on blind image separation. Human visual system says that people are not as sensitive to high frequency detail as to low frequency ones. Therefore, standard metrics may not best describe the actual experiment outcomes. In order to better evaluate the results in image processing, we adopt HVS as the subjective metric.
+
 \subsection{Applications of BSS}
 The classical application of BSS on the cocktail party problem is trying to understand how the humans select the voice of a particular speaker from an ensemble of different voices corrupted by music and noise in the background. Other applications, besides the cocktail party problem mentioned in the introduction, have also attracted researchers' attention in the past decade. Examples are given as below.
 
@@ -404,7 +407,7 @@ Hence we have split the term $\mathbf{\Phi X}$ to $k$ rank-1 matrices. Among tho
 \begin{equation}
     \mathbf{E}_k = U\Sigma V^T
 \end{equation}
-We define the solution for $\phi_k$ as the first column of $U$ and the coefficient vector $x^k$ as the first column of $V$. 
+We define the solution for $\phi_k$ as the first column of $U$ and the coefficient vector $x^k$ as the first column of $V$. The K-SVD algorithm obtains the dictionary update by $K$ separate SVD computations, which explains its name.
 
 \subsubsection{K-SVD + MMCA}
 The combination of K-SVD and MMCA in blind source separation 
@@ -423,13 +426,16 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
 \STATE 2. Set $\mathbf{A}$ to a radom column-normalised matrix.\\
 \STATE 3. $\mathbf{X} = A^T Y$.\\
 
-\STATE 4.for $L_{max}$ iterations:\\
+\STATE 4. for $L_{max}$ iterations:\\
 \quad \quad for $j = 1:N$:\\
-\quad \quad \quad Extract patches from $x_j$.
-\quad \quad \quad Solve the sparse recovery problem and get coefficients $\alpha$ by soft-thresholding.
-\quad \quad \quad Update $\Phi_j$ using K-SVD.
-\quad \quad \quad Calculate the residual and 
-
+\quad \quad \quad - Extract patches from $x_j$.\\
+\quad \quad \quad - Solve the sparse recovery problem and get coefficients $\alpha$ by soft-thresholding.\\
+\quad \quad \quad - Update $\Phi_j$ using K-SVD.\\
+\quad \quad \quad - Calculate the residual $\mathbf{E_j} = \mathbf{Y} - \sum_{l\neq j}a_lx_l^T$. \\
+\quad \quad \quad - Compute $x_j$. \\
+\quad \quad \quad - $a_j = \mathbf{E_j}x_j$ \\
+\quad \quad \quad - Normalise $a_j$  \\
+\STATE 5. Decrease $\sigma$ until stopping criterion is met. \\
 \end{algorithmic}
 \end{algorithm}
 

@@ -43,7 +43,6 @@
 \usepackage{color}
 \usepackage[tight,ugly]{units}
 \usepackage{url}
-\usepackage{float}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -61,7 +60,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
-\renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
+% \renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
 \usepackage{abstract}
 
 
@@ -76,21 +75,12 @@
 \setmainfont[Scale=.8]{OpenDyslexic-Regular}
 \else
 \usepackage[pdftex,hypertexnames=false,colorlinks]{hyperref} % provide links in pdf
-\hypersetup{pdftitle={econ.pdf},
-  pdfsubject={}, 
-  pdfauthor={\reportautshor},
-  pdfkeywords={}, 
-  pdfstartview=FitH,
-  pdfpagemode={UseOutlines},% None, FullScreen, UseOutlines
-  bookmarksnumbered=true, bookmarksopen=true, colorlinks,
-    citecolor=black,%
-    filecolor=black,%
-    linkcolor=black,%
-    urlcolor=black}
-\usepackage[all]{hypcap}
-\fi
 
+\usepackage[all]{hypcap}
 \usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfig}
 
 % various theorems
 \usepackage{ntheorem}
@@ -105,7 +95,6 @@
 \captionsetup[figure]{size=footnotesize}
    %% font size for figure and subfigure captions
 \usepackage[showframe]{geometry} % leave off "showframe" option in real document
-\usepackage{graphicx} 
 \usepackage{caption,subcaption}
 \usepackage[showframe]{geometry}
 
