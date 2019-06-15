@@ -1,4 +1,6 @@
 \section{Experiments on Image Source Separation}
+\subsection{Software}
+The software in this project is developed based on several opensource Matlab Toolboxes (i.e. WaveLab 850, K-SVD, MCALab110). Complete version of my code can be found on Github\footnote{https://github.com/Dieselmarble/FYP}. In addition, I wrote my own BS-KSVD Toolbox which involves considerable novelty.
 
 \subsection{Image Decomposition}
 In this section, we turn to use MMCA to separate two-dimensional data and compare the result with the standard ICA source separation techniques. \\
@@ -60,78 +62,94 @@ The results in this experiment proves that sparsity based methods successfully h
 \label{imapint1}
 \end{figure}
 
+\newpage
 \subsection{Blind Image Source Separation}
-GMCA is supposed to achieve better separation quality when the estimated components are 'very' sparse in the given dictionary. Therefore GMCA is supposed to perform well on separating images without distinct discrepancies. In this experiment, we mix the four source images into ten channels. The source images are picked as they contains similar morphologies. So each image are composed of linear combination of multiple morphological components. Separated images are displayed in Figure \ref{BSS_ex2_1}.\\
-
-Unfortunately the FastICA methods is not able to separate the original source. We hence adopt a sophisticated variant of it abbreviated as EFICA. All methods can distinguish the barbara inage (row 3) from the mixtures. But the ICA methods, nonetheless fail to separate the scenery photos (row 1 and 2). FastGMCA (FGMCA) uses a discrete wavelet dictionary
-
-deteriorate
+In this experiment, we mix 4 pictures into 10 channels. The source images are picked as they contains similar morphologies. Classical ICA methods and MMCA, GMCA are applied to separate the source. Unfortunately the FastICA methods is not able to separate the original source. We hence adopt a sophisticated variant of it abbreviated as EFICA. Moreover, it has been proved in \cite{BobinJ_2007SaMD} that using a single overcomplete DWT dictionary or a union of DCT and DWT dictionary in GMCA provides similar results. We therefore use a discrete wavelet dictionary in FastGMCA (FGMCA).\\
 
 
-In the robustness test, we impose guassian noise from 0dB to 30 dB. Figure X (c) and (d) are two mixed signals contaminated by 30dB noise. We can merely identify the original source from (e) and (f), but (c) and (d) using GMCA still gives acceptable result. It can also be shown in Figure X that noise has a greater effect on FastICA than GMCA. \\
+GMCA has been proved elsewhere \cite{BobinJ_2007SaMD} that it achieves better separation quality when the estimated components are 'very' sparse in the given dictionary. Therefore GMCA is supposed to perform well on separating images even without distinct discrepancies. Separated images are displayed in Figure (\ref{BSS_ex2_11}). It shows the recovered image by various BSS methods contaminated by 20dB noise. All methods can distinguish the barbara image (row 3) from the mixtures. The ICA methods, nonetheless fail to separate the scenery photos (row 1 and 2). But in (e) using GMCA still gives acceptable result. MMCA using curvelet + DCT in (d) gives better result than ICA methods, but not so good as GMCA.\\
 
 
-
-
-
-
-
-
-% ------------
+% ---------- begin figure-------------
 \begin{figure}[!htbp]
 \centering
 \subfigure[]{
-\begin{minipage}[b]{0.23\linewidth}
+\begin{minipage}[b]{0.17\linewidth}
 \includegraphics[width=1\linewidth]{images/boat_ori.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/paraty_ori.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/barbara_ori.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/pakhawaj_ori.png}
 \end{minipage}}
 \subfigure[]{
-\begin{minipage}[b]{0.23\linewidth}
+\begin{minipage}[b]{0.17\linewidth}
 \includegraphics[width=1\linewidth]{images/efica_out1.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/efica_out2.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/efica_out3.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/efica_out4.png}
 \end{minipage}}
 \subfigure[]{
-\begin{minipage}[b]{0.23\linewidth}
+\begin{minipage}[b]{0.17\linewidth}
 \includegraphics[width=1\linewidth]{images/jade_out1.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/jade_out2.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/jade_out3.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/jade_out4.png}
 \end{minipage}}
 \subfigure[]{
-\begin{minipage}[b]{0.23\linewidth}
+\begin{minipage}[b]{0.17\linewidth}
+\includegraphics[width=1\linewidth]{images/mmca_ex24.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/mmca_ex22.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/mmcaex21.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/mmca_ex23.png}
+\end{minipage}}
+\subfigure[]{
+\begin{minipage}[b]{0.17\linewidth}
 \includegraphics[width=1\linewidth]{images/gmca_out1.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/gmca_out2.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/gmca_out3.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/gmca_out4.png}
 \end{minipage}}
-\caption{Experiment2: image separation; \textbf{(a)}:Original image sources; \textbf{(b)}:EFICA outputs; \textbf{(c)}:JADE outputs; \textbf{(d)}:GMCA outputs }
-\label{BSS_ex2_1}
+\caption{Experiment2: image separation (20dB noise); \textbf{(a)}:Original image sources; \textbf{(b)}:EFICA outputs; \textbf{(c)}:JADE outputs; \textbf{(d)}:MMCA outputs; \textbf{(2)}:GMCA outputs.}
+\label{BSS_ex2_11}
 \end{figure}
-% -----------------------
-\begin{figure}[!tbp]
+
+% ----------end figure------------- %
+
+Figure (\ref{BSS_EV21}) portrays the evolution of average correlation coefficient over 4 estimated sources as a funciion of the noise variance. At a first glance, GMCA significantly outperforms the ICA methods interms of robustness and separation quality. JADE performs the worst in among all ICA based algorithms. Figure (\ref{BSS_EV21}) depicts the behavior of the imxing matrix criterion as the noise decreases. The mixing matrix criterion also clearly revels the strength of GMCA method.\\
+
+% ----------begin figure------------- %
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[b]{0.49\textwidth}
 \includegraphics[width=\textwidth]{images/image_separation1.png}
 \caption{Evolution of the correlation coefficient between original and estimated sources as the noise variance varies.}
+\label{BSS_EV21}
 \end{minipage}
 \begin{minipage}[b]{0.49\textwidth}
 \includegraphics[width=\textwidth]{images/image_separation2.png}
 \caption{Evolution of the mixing matrix criterion (after indeterminacy corrected) as the noise variance varies.}
+\label{BSS_EV22}
 \end{minipage}
-\label{plot21}
 \end{figure}
+% ----------end figure------------- %
 
-\newpage
+To summarise the findings in this experiment, GMCA does take good advantage of overcompleteness and morphological diversity. We can aslo claim that sparsity brings better results. Taking the advantages further, in next experiment, we explore how locally learned dictionary helps the blind source separation.\\
+
+
+\clearpage
 \subsection{Blind image separation using adaptive dictionary learning}
-In order to obtain enough training samples for dictionary learning, multiple overlapped segments (patches) of the sources are taken. To extract small overlapped patches from the source image. Here, we do not require the prior knowledge of the scaling matrix in front of the true mixing matrix [10], as otherwise required in MMCA and GMCA algorithms.\\
+In this experiment, we illustrate the results of applying the K-SVD BSS algorithm and the block-sparse BSS algorithm. Same as last experiment settings, a severe case of 4 image sources with very different morphologies was chosen to exam the performance of the methods. 400 iterations were selected as the stopping criterion, addive gaussian noise is added from 3dB to 40dB. The wavelet based GMCA is selected as the baseline algorithm.\\
 
-In addition, it is also worth noting that the SparseBSS model, using one dictionary to sparsely represent all the sources will get almost the same performance as using multiple but same-sized dictionaries when the dictionary redundancy d/n is large enough. As a result, it is reasonable to train only one dictionary for all the sources. An obvious advantage of using one dictionary is that the computational cost does not increase when the number of sources increases.\\
-\begin{figure}[h]
+In order to obtain enough training samples for dictionary learning, multiple overlapped segments (patches) of the sources are taken \cite{VAbolghasemi2012}. Choose the optimal patch size is a subtle problem. Generally, very large patches should be avoided as they lead to massive dictionaries and also provide few training samples for the dictionary learning stage. We choose $8\times 8$ patches for this experiment. Furthermore the patches are $50\%$ overlapped as suggested in \cite{VAbolghasemi2012}.\\
+
+The dictionaries obtained have size of $64\times 256$. The plots in (\ref{dictionary_learned}) have $16 \times 16 = 256$ blocks whereas each block is obtained from a $8\times 8$ patches. Figure (\ref{dictionary_learned}) also proves both the learned local dictionaries have good adaption to the corresponding sources, and significantly differnent from the standard DCT dictionary in (a).\\
+
+\begin{figure}[!htbp]
 \centering
+\subfigure[]{
+\begin{minipage}[b]{0.99\linewidth}
+\centering
+\includegraphics[width=0.23\linewidth]{images/DCT_dict.png}\vspace{4pt}
+\end{minipage}}
 \subfigure[]{
 \begin{minipage}[b]{0.99\linewidth}
 \includegraphics[width=0.23\linewidth]{images/dic1.png}\vspace{4pt}
@@ -141,19 +159,31 @@ In addition, it is also worth noting that the SparseBSS model, using one diction
 \end{minipage}}
 \subfigure[]{
 \begin{minipage}[b]{0.99\linewidth}
-\includegraphics[width=0.23\linewidth]{images/DCT_dict.png}\vspace{4pt}
-\includegraphics[width=0.23\linewidth]{images/DCT_dict.png}\vspace{4pt}
-\includegraphics[width=0.23\linewidth]{images/DCT_dict.png}\vspace{4pt}
-\includegraphics[width=0.23\linewidth]{images/DCT_dict.png}
+\includegraphics[width=0.23\linewidth]{images/block_dict1.png}\vspace{4pt}
+\includegraphics[width=0.23\linewidth]{images/blockdict2.png}\vspace{4pt}
+\includegraphics[width=0.23\linewidth]{images/blockdict3.png}\vspace{4pt}
+\includegraphics[width=0.23\linewidth]{images/blockdict4.png}
 \end{minipage}}
 % \vspace{-0.5cm} 
-\caption{Trained Dictionary using K-SVD}
+\caption{(a): A standard discrete cosine (DCT) dictionary; (b): Trained dictionary using K-SVD for sources 1,2,3,4 respectively; (b): Trained dictionary using SAC+BK-SVD for the 4 sources.}
+\label{dictionary_learned}
 \end{figure}
 
-% --------------------- %
-\begin{figure*}
+Figure (\ref{apt_compare}) compares the separation results
+using several algorithm under 20dB Gaussian noise. \\
+
+
+% ---------begin figure ------------ %
+\begin{figure*}[!htbp]
 \centering
 \subfigure[]{
+\subfigure[]{
+\begin{minipage}[b]{0.23\linewidth}
+\includegraphics[width=1\linewidth]{images/boat_ori.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/paraty_ori.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/barbara_ori.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/pakhawaj_ori.png}
+\end{minipage}}
 \begin{minipage}[b]{0.23\linewidth}
 \includegraphics[width=1\linewidth]{images/gmca_out1.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/gmca_out2.png}\vspace{4pt}
@@ -167,5 +197,28 @@ In addition, it is also worth noting that the SparseBSS model, using one diction
 \includegraphics[width=1\linewidth]{images/ammca_out3.png}\vspace{4pt}
 \includegraphics[width=1\linewidth]{images/ammca_out1.png}
 \end{minipage}}
-\caption{Experiment3: Using adaptive dictionary learning; \textbf{(a)}:Original image sources; \textbf{(b)}:GMCA outputs; \textbf{(c)}:K-SVD+MMCA outputs;}
+\subfigure[]{
+\begin{minipage}[b]{0.23\linewidth}
+\includegraphics[width=1\linewidth]{images/bk3.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/bk1.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/bk2.png}\vspace{4pt}
+\includegraphics[width=1\linewidth]{images/bk4.png}
+\end{minipage}}
+\caption{Experiment 3 (20dB): Using adaptive dictionary learning; \textbf{(a)}: original sources; \textbf{(b)}:GMCA outputs; \textbf{(c)}:K-SVD+MMCA output; \textbf{(d)}:BK-SVD+SAC+MMCA outputs;}
+\label{apt_compare}
 \end{figure*}
+% ---------end figure ------------ %
+
+The running time for K-SVD BSS algorithm is 221 seconds. However the running time for BK-SVD BSS algorithm is 389 seconds. For Fast GMCA it is only 4 seconds. This coincides our deduction before, the sparse agglomerative clustering algorithm dominates the complexity. Even though the BK-SVD algorithm is supposed to be faster than K-SVD, but the clustering stage slows down the overall process. It is also seen that, due to learning the dictionary, making both algorithms are computationally demanding for large scale applications (i.e. image processing) and are much slower than the GMCA algorithm \\
+% --------------begin table ----------- %
+\begin{table}[!htbp]
+\centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    MMCA & Fast GMCA & K-SVD & BK-SVD+SAC \\\hline
+    $221s$ & $4s$ & $221s$ & $389s$ \\\hline
+    \end{tabular}
+    \caption{Running time for GMCA, KSVD and SAC+BK-SVD}
+\end{table}
+% --------------end table ----------- %
+ 

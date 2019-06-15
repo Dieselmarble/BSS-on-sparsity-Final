@@ -141,7 +141,7 @@ JADE is based on similar ideas of the FastICA agorithm apart from it calculates 
 ICA suffers from several limitations which make it unsuitable in some specific applications. Firstly, ICA require the mixing matrix $\mathbf{A}$ to be full rank and square. As we mentioned in the introdcution, generally ICA cannot be applied to the underdetermined mixing scenario. Secondly, ICA also assumes that amongst the components in $\mathbf{s}$, there exists at most one component that is Gaussian. This means ICA is not robust under the additive Gaussian nosie setting. While even implicit, the ICA algorithm requires information on the source distribution when doing separating computation such as maximum likelihood estimation, making it hard for model generalisation. We will exam the limitations of ICA in future simulations.
 
 \subsection{Sparse representations of signals}
-Here we introduces the idea of sparse signal processing and how it helps to solve underdetermined linear systems. However we need to discriminate the expression from the underdetermined system mentioned in previous parts. In BSS, `underdetermined system' means linear combination of source signals while here we refer to further linearly decompose the source signals into a given dictionary. Sparse signal processing has numerous applications in compress sensing, image deniosing and super-resulation reconstrcution.
+Here we introduces the idea of sparse signal processing and how it helps to solve underdetermined linear systems (dictionary). However we need to discriminate the expression from the underdetermined system mentioned in previous parts. In BSS, `underdetermined system' means linear combination of \textbf{source signals} while here we refer to further linearly decompose the source signals into a given \textbf{dictionary}. In a more plain language, less number of examples than the data dimensionality involved are available for learning the dictionary. Sparse signal processing has numerous applications in compress sensing, image deniosing and super-resulation reconstrcution.
 
 \subsubsection{Overcomplete dictionary}
 \label{over_dict}
@@ -234,12 +234,21 @@ Each morphological components $S_k$\\
 \end{algorithm}
 
 \subsubsection{Mutichannel morphological component analysis (MMCA)}
-In this section, we extend the monochannel sparse decomposition problem described and characterized in last section to multichannel data. In the MMCA setting, we assumed that the sources $\mathbf{S}$ in Equation (\ref{mixing}) have strictly different morphologies (i.e. each source $s_i$ is assumed to be strictly sparsely represented in one particular orthonormal basis $\mathbf{\Phi}_i$) \cite{BobinJ_2007SaMD}. An iterative thresholding Block-Coordinate Relaxation algorithm similar to Algorithm (\ref{algFramwork1}) was proposed to solve the joint optimisation problem below.
+In this section, we extend the monochannel sparse decomposition problem described and characterized in last section to multichannel data. In the MMCA setting, we assumed that the sources $\mathbf{S}$ in Equation (\ref{mixing}) have strictly different morphologies (i.e. each source $s_i$ is assumed to be strictly sparsely represented in one particular orthonormal basis $\mathbf{\Phi}_i$) \cite{BobinJ_2007SaMD}. Figure \ref{illu_mca_and_gmca} precisely reveals the difference between MCA and MMCA. The top observation can be strictly divided in to texture and gaussian parts whereas the bottom multichannel observations are complex combinations of curvelets and texure components.\\
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{images/mca_gmca.png}
+\caption{Illustration of the image decomposition(top) using MCA and the blind source separation (bottom) using GMCA. For the bottom part, each source is itself a mixture of morphological components(texture and cartoon)}
+\label{illu_mca_and_gmca}
+\end{figure}
+
+An iterative thresholding Block-Coordinate Relaxation algorithm similar to Algorithm (\ref{algFramwork1}) was proposed to solve the joint optimisation problem below.
 \begin{equation}
     \{\mathbf{\tilde{A},\tilde{S}}\} = \text{Arg} \: \min_{\mathbf{A},\mathbf{S}}\sum_{k=1}^N \lVert s_k \mathbf{\Phi}_k^T \rVert_{1} + \lambda \:\lVert \mathbf{X} - \mathbf{AS} \rVert^2_2
     \label{MMCAequation}
 \end{equation}
-The equation above is very similar to Equation (\ref{MCAequation}) in MCA. Unfortunately, this MMCA criterion suffers from several drawbacks and particularly from an indeterminacy attached to the model structure \cite{BobinJ_2007SaMD}. For instance, the minimisation of this criterion may result in trivial solutions : $\mathbf{A} = \rho \mathbf{A}$ and $\mathbf{S} = \frac{1}{\rho} \mathbf{S}$ (the sparsity term can be minimised as desired as long as $\rho$ tends to $+\infty$) \cite{BobinJ_2007SaMD}. We therefore normalise the columns in matrix $\mathbf{A}$ at each iteration, as mentioned in Chapter \ref{ambiguitiesBSS}.
+The equation above is very similar to Equation (\ref{MCAequation}) in MCA. Unfortunately, this MMCA criterion suffers from several drawbacks and particularly from an indeterminacy attached to the model structure \cite{BobinJ_2007SaMD}. For instance, the minimisation of this criterion may result in trivial solutions : $\mathbf{A} = \rho \mathbf{A}$ and $\mathbf{S} = \frac{1}{\rho} \mathbf{S}$ (the sparsity term can be minimised as desired as long as $\rho$ tends to $+\infty$) \cite{BobinJ_2007SaMD}. We therefore normalise the columns in matrix $\mathbf{A}$ at each iteration, as mentioned in Chapter \ref{ambiguitiesBSS}.\\
 
 Let's introduce the $k^{\text{th}}$ channel residual $D_k = X - \sum_{j \neq k}a^j s_{j}$ (accounts for the part of that data unexplained by the other couples $\{a^j, s_j\}j \neq k$), the minimisation of the whole criterion (\ref{MMCAequation}) is equivalent to this joint minimisation problem.
 \begin{equation}
@@ -258,7 +267,7 @@ Zero the garident with respect to $s_k$ and $a^k$ leads to the following coupled
        a^k = \frac{1}{s_ks_k^T}D_k s_k^T
     \end{cases}
 \end{equation}
-We then use the soft thresholding algorithm to solve for approximation of $s_k$ and $a_k$. Setting the threshold $\delta = \frac{\lambda_k}{2\lVert a^k\Gamma^{-1}a^k \rVert}$. Then considering a fixed $s_k$, the update on $a_k$ follows a simple least square linear regression.
+We then use the soft thresholding algorithm to solve for approximation of $s_k$ and $a_k$. Setting the threshold $\delta = \frac{\lambda_k}{2\lVert a^k\Gamma^{-1}a^k \rVert}$. Then considering a fixed $s_k$, the update on $a_k$ follows a simple least square linear regression.\\
 
 \begin{algorithm}[!htbp] 
 \caption{ The numerical algorithm for MMCA} 
@@ -298,15 +307,6 @@ The product $\mathbf{AS}$ can be split into $n\times D$ multichannel morphologic
     \tilde{\varphi}_{ik} = \text{arg} \; \min_{\{\varphi_{ik}\}} \lVert \varphi_{ik}\mathbf{\Phi}_k^T\rVert_{1} + \lambda \; \lVert \mathbf{X}_{i,k} - a^i\varphi_{ik}\rVert_2^2
 \end{equation}
 Similarly to MMCA, GMCA uses the component-wise iterative thresholding algorithm which is summarized as follows. Note the difference notations of morphological components coefficients $\alpha_{ik}$ and mixing matrix coefficients $a^i$.\\
-
-Figure \ref{illu_mca_and_gmca} the top parts can be strictly divided in to texture and gaussian parts whereas the two bottom images are complex combination of curvelets and texure components.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{images/mca_gmca.png}
-\caption{Illustration of the image decomposition(top) using MCA and the blind source separation (bottom) using GMCA. For the bottom part, each source is itself a mixture of morphological components(texture and cartoon)}
-\label{illu_mca_and_gmca}
-\end{figure}
 
 \begin{algorithm}[!htbp] 
 \caption{ The numerical algorithm for GMCA.} 
@@ -439,18 +439,13 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
 \end{algorithm}
 
 
-\subsection{Further research directions in MCA based BSS}
+\subsection{Further research directions in sparsity based BSS}
 In this section, we point out several challenges in recent blind source separation research, and anticipate the further research directions.\\
 \begin{itemize}
     \item Dictionary Selection for morphological component analysis was empirical. The prevailing dictionaries include wavelets, discrete cosine, ridgelet, curvelet and their derivatives. Due to the complex nature of images, methodology of selecting appropriate dictionary for different  morphological diversities is critical.
     \item Develop effective redundant multiscale transformations. The key to MCA dictionary is that the dictionary has a fast way of calculating them. For instance, the sceond generation curvelets transform outperforms the traditional curvelets in terms of speed and comlexity.
     \item Establish effective numerical optimisation algorithm and improve the convergence of such an algorithm. Most MCA techniques of estimating the mixing matrix $\mathbf{A}$ and $\mathbf{S}$ are based on the iterative thresholding method. Generally, we need to improve the concurrent iterative thresholding methods by enhancing the adaptivity and the convergence rate.
 \end{itemize}
-
-\subsection{Software}
-The software in this project is developed based on several opensource Matlab Toolboxes (i.e. WaveLab 850, K-SVD, MCALab110). Complete version of my code can be found on Github\footnote{https://github.com/Dieselmarble/FYP}. In addition, I wrote my own BS-KSVD Toolbox which involves considerable novelty.
-
-
 
 \subsection{Summary of this Section}
 This chapter has considered the BSS methods which will be used in next stage of this project. Firstly, the linear instantaneous model was introduced and BSS assumptions were stated. We then introduced performance metrics to evaluate the performances of various BSS algorithms. The problem was then extended to the case of sparsity where morphological component analysis is discussed. Finally, we foresee the future research trends in morphological component analysis based blind source separation. Inspirations are acquired from the future research trends so that I can propose my own research direction.
