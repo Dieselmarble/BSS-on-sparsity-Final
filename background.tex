@@ -220,7 +220,7 @@ In this section, we extend the monochannel sparse decomposition problem describe
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{images/mca_gmca.png}
-\caption{Illustration of the image decomposition(top) using MCA and the blind source separation (bottom) using GMCA. For the bottom part, each source is itself a mixture of morphological components(texture and cartoon)}
+\caption{Illustration of the image decomposition(top) using MCA and the blind source separation (bottom) using MMCA. For the bottom part, each source is itself a mixture of morphological components(texture and cartoon)}
 \label{illu_mca_and_gmca}
 \end{figure}
 
@@ -361,7 +361,7 @@ As described before, dictionary learning has wide applications in compress sensi
 \end{equation}
 Motivated by the idea of image denoising we can adapt MMCA to learned local dictionaries from the mixed sources within the separation process\cite{VAbolghasemi2012}. Hence we does not need any prior knowledge about the sparse domain of the sources. We now introduce the K-SVD dictionary learning algorithm which will be applied later in experiment section.\\
 
-\subsubsection{K-SVD Dictionary learning}
+\subsubsection{K-SVD dictionary learning}
 % The K-SVD algorithm involves two basic steps, which together constitute the algorithm iteration: (i) the signals in X are sparse-coded given the current dictionary estimate, producing the sparse representations matrix Γ, and (ii) the dictionary atoms are updated given the current sparse representations; see Algorithm 3. The sparse-coding part (line 5) is commonly implemented using OMP. The dictionary update (lines 6-13) is performed one atom at a time, optimizing the target function for each atom individually while keeping the rest fixed.\\
 The K-SVD algorithm can be decomposed into two stages, which are executed alternatively as what we did in the iterative relaxation method. First we can use any pursuit algorithm (BP, OMP) to calculate the sparse coefficients $\mathbf{X}$. This is called the sparse coding stage. Then we proceed to the codeword update stage. In Equation (\ref{equ14}), assuming that both $\mathbf{\Phi}$ and $\mathbf{X}$ is fixed and we only consider one atom $\phi_k$ in dictionary $\mathbf{\Phi}$ and the coefficients $x^k$ ($k^{th}$ row in $\mathbf{X}$) corresponding to it, the penalty term in the objective function can be rewritten as
 
@@ -389,12 +389,12 @@ $\Omega_k$ is a mask consisting 0 and 1s so that we only consider atoms that ref
 \end{equation}
 We define the solution for $\phi_k$ as the first column of $U$ and the coefficient vector $x^k$ as the first column of $V$. In the same manner, K-SVD sweeps through all columns always use the most updated coefficients as they emerge from preceding SVD steps. To conclude, The K-SVD algorithm obtains the dictionary update by $K$ separate SVD computations, which explains its name.\\
 
-\subsubsection{K-SVD + MMCA}
+\subsubsection{K-SVD+MMCA}
 The combination of K-SVD and MMCA in blind source separation 
 is similar to the conventional MMCA algorithm apart from it requires updating of three matrices, the estimated mixing $\mathbf{A}$, the estimated source $\mathbf{S}$ and the dictionary $\mathbf{\Phi}$. A stepwise algorithm is displayed below
 
 \begin{algorithm}[!htbp] 
-\caption{The numerical algorithm for K-SVD + MMCA} 
+\caption{The numerical algorithm for K-SVD+MMCA} 
 \label{alg:Framwork} 
 \begin{algorithmic}
 \REQUIRE ~~\\%Input
