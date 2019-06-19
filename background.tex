@@ -372,6 +372,8 @@ As described before, dictionary learning has wide applications in compress sensi
 Motivated by the idea of image denoising we can adapt MMCA to learned local dictionaries from the mixed sources within the separation process\cite{VAbolghasemi2012}. Hence we does not need any prior knowledge about the sparse domain of the sources. We now introduce the K-SVD dictionary learning algorithm that will be applied later in experiment section.\\
 
 \subsubsection{K-SVD}
+The K-SVD algorithm involves two basic steps, which together constitute the algorithm iteration: (i) the signals in X are sparse-coded given the current dictionary estimate, producing the sparse representations matrix Γ, and (ii) the dictionary atoms are updated given the current sparse representations; see Algorithm 3. The sparse-coding part (line 5) is commonly implemented using OMP. The dictionary update (lines 6-13) is performed one atom at a time, optimizing the target function for each atom individually while keeping the rest fixed.\\
+
 The K-SVD algorithm can be decomposed into two stages, which are executed alternatively as what we did in the iterative relaxation method. First we can use any pursuit algorithm (BP, OMP) to calculate the sparse coefficients $\mathbf{X}$. This is called the sparse coding stage. Then we proceed to the codework update stage. In Equ.(\ref{equ14}), assuming that both $\mathbf{\Phi}$ and $\mathbf{X}$ is fixed and we only consider one atom $\phi_k$ in dictionary $\mathbf{\Phi}$ and the coefficients $x^k$ ($k^{th}$ row in $\mathbf{X}$) corresponding to it, the penalty term in the objective function can be rewritten as
 
 \begin{equation}
