@@ -260,7 +260,25 @@ The running time for K-SVD BSS algorithm is 238 seconds. However the running tim
 In this section we examed the proposed BSS framework for the design of a block-sparsifying dictionary given a set of images and a maximal block size. Reuslts shown that it outperforms the prevailing K-SVD BSS algorithm by separation quality and reconstruction accuracy.
 
 \subsection{Choosing the best maximal block size and block sparsity level}
-From out experience in last section, we found that finding the optimal selection of best maximal block size $s$ and block sparsity level $k$ in SAC + B-KSVD is an undetermined problem which needs more investigation. To avoid the long running time in BSS framework, we reduce the problem to a simple image reconstruction problem, where an image is given and the algorithm is intended to learn the dictionary and representation coefficients. Reconstruction quality is assessed by the mean square error (MSE). Similar as last experiment, we extract $8 \times 8$ patches from a $256 \times 256$ barbara image and set the maximum number of iterations to be 100. A $64 \times 96$ dictionary is learned and the sparse coefficients are $96\times1024$. Hence we can recover the $64\times1024$ image. The MSE result of the proposed methods is again, compared with K-SVD.
+From out experience in last section, we found that finding the optimal selection of best maximal block size $s$ and block sparsity level $k$ in SAC + B-KSVD is an undetermined problem which needs more investigation. To avoid the long running time in BSS framework, we reduce the problem to a simple image reconstruction problem, where an image is given and the algorithm is intended to learn the dictionary and representation coefficients. Reconstruction quality is assessed by the mean square error (MSE). Similar as last experiment, we extract $8 \times 8$ patches from a $256 \times 256$ barbara image and set the maximum number of iterations to be 100. A $64 \times 96$ dictionary is learned and the sparse coefficients are $96\times1024$. Hence we can recover the $64\times1024$ image. The MSE result of the proposed methods is again, compared with K-SVD using Batch-OMP.\\
 
-We vary the number
 
+The K-SVD algorithm involves two basic steps, which together constitute the al- gorithm iteration: (i) the signals in X are sparse-coded given the current dictionary estimate, producing the sparse representations matrix Γ, and (ii) the dictionary atoms are updated given the current sparse representations; see Algorithm 3. The sparse-coding part (line 5) is commonly implemented using OMP. The dictionary update (lines 6-13) is performed one atom at a time, optimizing the target function for each atom individually while keeping the rest fixed.\\
+
+We vary $s$ and $k$ from 1 to 6 and plot the reconstruction error using two methods in heatmaps. It is obvious that there exists a general trend that the reconstruction error decreases as the block size gets larger. It is reasonable because the more atoms the dictionary collect, the better will the reconstruction quality be. But the decreasing error trend is not monotonic for SAC+B-KSVD in Figure (\ref{HEAT2}). For instance, the selection of $s=4$ and $k=5$ gives better outcome than $s=5$ and $k=5$. This means we cannot blindly increase the 
+
+% ----------begin figure------------- %
+\begin{figure}[!htbp]
+\centering
+\begin{minipage}[]{0.49\textwidth}
+\includegraphics[width=\textwidth]{images/ksvd_heat.png}
+\caption{K-SVD Reconstruction error heatmap against block size and sparsity level.}
+\label{HEAT1}
+\end{minipage}
+\begin{minipage}[]{0.49\textwidth}
+\includegraphics[width=\textwidth]{images/bksvd_heat.png}
+\caption{BK-SVD Reconstruction error heatmap against block size and sparsity level.}
+\label{HEAT2}
+\end{minipage}
+\end{figure}
+% ----------end figure------------- %

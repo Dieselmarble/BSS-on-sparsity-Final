@@ -64,7 +64,7 @@ After having successfully recovered the optimal block structure. We then solve f
 \end{equation}
 The author in \cite{dictionary_block_sparse} proposed \textit{block K-SVD} (BK-SVD), a natural extension of the K-SVD algorithm to solve (\ref{BKSVD1}). BK-SVD algorithm employs a similar `columnwise' atom updating manner as in K-SVD but forces the learned dictionary to have higher sparsity level.\\
 
-We first fix $\mathbf{\Phi}^{m-1}$ and can use any pursuit method (e.g. OMP) to solve (\ref{BKSVD1}) which reduces to.
+We first fix $\mathbf{\Phi}^{m-1}$ and can use any pursuit method (e.g. Batch-OMP) to solve (\ref{BKSVD1}) which reduces to.
 
 \begin{equation}
 \begin{aligned}

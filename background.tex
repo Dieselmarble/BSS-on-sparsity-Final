@@ -48,13 +48,11 @@ where $\mathbf{D}$ is a diagonal matrix and $\mathbf{P}$ is a permutation matrix
 
 \subsubsection{Ambiguities of BSS process}
 \label{ambiguitiesBSS}
-Because lack of prior knowledge about the sources and mixing process. While estimating the mixing and source matrices, we introduce the diagonal matrix $\mathbf{D}$ and permutation matrix $\mathbf{P}$ in Equation (\ref{permutEQ}), which accounts for the two ambiguities below.
+Because lack of prior knowledge about the sources and mixing process. While estimating the mixing and source matrices, we introduce the diagonal matrix $\mathbf{D}$ and permutation matrix $\mathbf{P}$ in Equation (\ref{permutEQ}), which accounts for the two ambiguities below.\\
 
-\begin{enumerate}
-    \item Variances (energies) of each source component is unknown. The reason is that, both $\mathbf{S}$ and $\mathbf{A}$ are not defined, any scalar multiplication in one of the sources $s_i$ would always be cancelled by dividing the corresponding column $a_i$ by the same quantity. However, the information of sources is stored in the signal waveform rather than amplitude. This ambiguity is hence insignificant in most applications \cite{HYVARINEN2000411}. 
-    As mentioned in the last section, the columns of $\mathbf{A}$ is normalised to unity just for convenience in calculation.
-    \item We cannot determine the order of the sources. In Equation (\ref{sumofs_t}), we can freely rearrange the sources up to any permutation without affecting the observation samples. Any of the source components can be regarded as the first one. Again, Because the information of each component is contained in the shape of waveform of that component, not the order of components. So this ambiguity is also insignificant.
-\end{enumerate}
+Variances (energies) of each source component is unknown. The reason is that, both $\mathbf{S}$ and $\mathbf{A}$ are not defined, any scalar multiplication in one of the sources $s_i$ would always be cancelled by dividing the corresponding column $a_i$ by the same quantity. However, the information of sources is stored in the signal waveform rather than amplitude. This ambiguity is hence insignificant in most applications \cite{HYVARINEN2000411}. As mentioned in the last section, the columns of $\mathbf{A}$ is normalised to unity just for convenience in calculation.\\
+
+Apart from amplitude uncertainty, we cannot determine the order of the sources. In Equation (\ref{sumofs_t}), we can freely rearrange the sources up to any permutation without affecting the observation samples. Any of the source components can be regarded as the first one. Again, Because the information of each component is contained in the shape of waveform of that component, not the order of components. So this ambiguity is also insignificant.
 
 
 
@@ -105,11 +103,9 @@ In Code-Division Multiple Access (CDMA), blind separation techniques are used to
 BSS is also closely related with studying the underlying factors of the financial data and driving mechanisms behind financial time series. In \cite{OjaE2000Icaf} ICA is applied to financial time series data. The data is parallel, representing the simultaneous cash flow at several stores belonging to the same retail chain. The ICA finds the fundamental factors that are common to all stores that affect the cashflow data, although each store responds to these factors in a slightly different manner. Thus, the cashflow effect of the factors specific to any particular store could be revealed.
 
 \subsection{Independent Component Analysis}
-ICA algorithms are about devising appropriate independence approximations. This includes, maximisation of non-Gaussianity, minimisation of mutual information and maximum likelihood estimation \cite{HYVARINEN2000411}. ICA based neural network \cite{Bell1995AnIA} was also proposed based on maiximing the output entropy of a neural network with non-linear outputs. We are not going to discuss these approximations in depth as we want to focus more on the sparsity based blind source separation.\\
+ICA algorithms are about devising appropriate independence approximations. This includes, maximisation of non-Gaussianity, minimisation of mutual information and maximum likelihood estimation \cite{HYVARINEN2000411}. ICA based neural network \cite{Bell1995AnIA} was also proposed based on maiximing the output entropy of a neural network with non-linear outputs. We are not going to discuss these approximations in depth as we want to focus more on the sparsity based blind source separation. However, FastICA and JADE are introduced below.\\
 
-
-\subsubsection{FastICA}
-With a taste of the Central Limit Theorem, intuition tells us that the distribution of a sum of independent random variables tends to toward a Gaussian distribution, under certain conditions. Known from Equation (\ref{estimationYandZ}) that $y = w^T x = w A s = z^T s$. It is clear that the closest estimation is when $z^Ts = s$ which also has the least Gaussianity. Hence finding independent $s$ is equivalent to minimisation of Gaussianity. The approximation of non-Gaussianity is based on a maximum negentropy principle.
+FastICA calculates the negentropy as an approximate of independence measure. With a taste of the Central Limit Theorem, intuition tells us that the distribution of a sum of independent random variables tends to toward a Gaussian distribution, under certain conditions. Known from Equation (\ref{estimationYandZ}) that $y = w^T x = w A s = z^T s$. It is clear that the closest estimation is when $z^Ts = s$ which also has the least Gaussianity. Hence finding independent $s$ is equivalent to minimisation of Gaussianity. The approximation of non-Gaussianity is based on a maximum negentropy principle.
 \begin{equation}
     J(y) \propto [E\{G(y)\} - E\{G(v)\}]^2
 \end{equation}
@@ -132,11 +128,8 @@ Estimation of $\hat{\mathbf{A}}$
 \end{algorithm}
 % -------------------- algorithm block ------------------------
 
-\subsubsection{Joint approximation diagonalization of
-eigenmatrices (JADE)}
-JADE is based on similar ideas of the FastICA agorithm apart from it calculates the fourth-order statistics (Kurtosis). JADE finds out the direction where the kurtosis of observed signal grows most strongly (super-Gaussian signals) or decreases most strongly (sub-Gaussian signals).
+JADE is based on similar ideas of the FastICA agorithm apart from it calculates the fourth-order statistics (Kurtosis). JADE finds out the direction where the kurtosis of observed signal grows most strongly (super-Gaussian signals) or decreases most strongly (sub-Gaussian signals).\\
 
-\subsubsection{Limitations of ICA methods}
 \label{ica_defect}
 ICA suffers from several limitations which make it unsuitable in some specific applications. Firstly, ICA require the mixing matrix $\mathbf{A}$ to be full rank and square. As we mentioned in the introdcution, generally ICA cannot be applied to the underdetermined mixing scenario. Secondly, ICA also assumes that amongst the components in $\mathbf{s}$, there exists at most one component that is Gaussian. This means ICA is not robust under the additive Gaussian nosie setting. While even implicit, the ICA algorithm requires information on the source distribution when doing separating computation such as maximum likelihood estimation, making it hard for model generalisation. We will exam the limitations of ICA in future simulations.
 
