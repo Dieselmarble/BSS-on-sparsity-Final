@@ -47,26 +47,24 @@ where $\mathbf{D}$ is a diagonal matrix and $\mathbf{P}$ is a permutation matrix
 
 \subsection{Ambiguities of BSS process}
 \label{ambiguitiesBSS}
-Because lack of prior knowledge about the sources and mixing process. While estimating the mixing and source matrices, we introduce the diagonal matrix $\mathbf{D}$ and permutation matrix $\mathbf{P}$ in Equation (\ref{permutEQ}), which accounts for the two ambiguities below.\\
+Because lack of prior knowledge about the sources and mixing process. While estimating the mixing and source matrices, we introduce the diagonal matrix $\mathbf{D}$ and permutation matrix $\mathbf{P}$ in Equation (\ref{permutEQ}), which accounts for the two ambiguities, amplitude and order.\\
 
 Variances (energies) of each source component is unknown. The reason is that, both $\mathbf{S}$ and $\mathbf{A}$ are not defined, any scalar multiplication in one of the sources $s_i$ would always be cancelled by dividing the corresponding column $a_i$ by the same quantity. However, the information of sources is stored in the signal waveform rather than amplitude. This ambiguity is hence insignificant in most applications \cite{HYVARINEN2000411}. As mentioned in the last section, the columns of $\mathbf{A}$ is normalised to unity just for convenience in calculation.\\
 
-Apart from amplitude uncertainty, we cannot determine the order of the sources. In Equation (\ref{sumofs_t}), we can freely rearrange the sources up to any permutation without affecting the observation samples. Any of the source components can be regarded as the first one. Again, Because the information of each component is contained in the shape of waveform of that component, not the order of components. So this ambiguity is also insignificant.
-
-
+Apart from amplitude uncertainty, we cannot determine the order of the sources. In Equation (\ref{sumofs_t}), we can freely rearrange the sources up to any permutation without affecting the observation samples. Any of the source components can be regarded as the first one. Fortunately, we can use certain techniques (e.g. Hungarian Algorithm) to sort the recovered sources after separation has been done. Again, because the information of each component is contained in the shape of waveform of that component, not the order of components. So this ambiguity is also insignificant.
 
 \subsection{Preprocessing of BSS techniques}
 Before applying the BSS methods on the data, it is usually very usful to do some preprocessing. In this section, we introduce two preprocessing techniques that make the blind source separation problem simpler and better conditioned.
-Centering:
+1. Centering:
 Most BSS methods assumes the data to be zero centered. The most basic and necessary preprocessing is to center the observation data $x_i$ by substract the sample mean from it. 
-Whitening:
+2. Whitening:
 Before applying BSS methods (and after centering), the observed vector $x$ is linearly transformed to $\tilde{x}$ so that each column is uncorrelated and have unity variance. More specifically, the covariance matrix of $\tilde{x}$ equals the identity martix, $\E\{\tilde{x}\tilde{x}^T\} = \mathbf{I}$. The most common used whitening transformation is eigenvalues decompostion (EVD) of the data covariance matrix.
 
 \subsection{BSS Performance Measures}
 \label{perform_metric}
 
 \subsubsection{Correlation coefficient}
-Correlation coefficient measures the similarity between a recovered source $S^{'}$ and the original source $S$.
+Correlation coefficient measures the similarity between a recovered source $S^{'}$ and the original source $S$. Larger correlation coefficients indicate the original sources are better recovered.
 \begin{equation}
     \rho = \frac{\text{cov}(S^{'},S)}{\sigma_x \sigma_y}
 \end{equation}
@@ -87,14 +85,14 @@ The classical application of BSS on the cocktail party problem is trying to unde
 
 An electroencephalogram (EEG) is a test used to find problems related to electrical activity of the brain. In EEG analysis, different artifacts such as eye-blinking deteriorate its quality. Identification of the various sources from the independent components is thus integral for clinical analysis. An innovative method combining the use of standard BSS techniques and Support Vector Machines (SVM) was applied to solve this problem  \cite{Duda2000PC954544}.\\
 
-Filling `holes' in images is an interested and important inverse problem with applications in repairing the old and deteriorated artwork. Based on Morphological Component Analysis, an inpainting algorithm has been proposed  which is capable of filling holes in either texture or cartoon content \cite{ELAD2005340}. The inpainting algorithm is applied on the famous Barbara images and achieve satisfactory result even when there are 80\% missing pixels. \\
+Filling `holes' in images is an interested and important inverse problem with applications in repairing the old and deteriorated artwork. Based on Morphological Component Analysis, an inpainting algorithm has been proposed  which is capable of filling holes in either texture or cartoon content \cite{ELAD2005340}. In Figure (\ref{imapint_1}), the inpainting algorithm is applied on the famous Barbara images and achieve satisfactory result even when there are 80\% missing pixels. \\
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.45\textwidth]{images/impainting1.png}
 \caption{Barbara image with $80\%$ missing pixels (right). The result of the MCA impainting is
 given on the left.}
-\label{imapint1}
+\label{imapint_1}
 \end{figure}
 
 In Code-Division Multiple Access (CDMA), blind separation techniques are used to suppress unintentional multiuser interference (jammer), separate the desired user signals from other users' signals \cite{Raju2006}. BSS also has wide applications in military based telecomm systems which recovers radar reflection from strong intentional interference.\\
@@ -102,9 +100,9 @@ In Code-Division Multiple Access (CDMA), blind separation techniques are used to
 BSS is also closely related with studying the underlying factors of the financial data and driving mechanisms behind financial time series. In \cite{OjaE2000Icaf} ICA is applied to financial time series data. The data is parallel, representing the simultaneous cash flow at several stores belonging to the same retail chain. The ICA finds the fundamental factors that are common to all stores that affect the cashflow data, although each store responds to these factors in a slightly different manner. Thus, the cashflow effect of the factors specific to any particular store could be revealed.
 
 \subsection{Independent Component Analysis}
-ICA algorithms are about devising appropriate independence approximations. This includes, maximisation of non-Gaussianity, minimisation of mutual information and maximum likelihood estimation \cite{HYVARINEN2000411}. ICA based neural network \cite{Bell1995AnIA} was also proposed based on maiximing the output entropy of a neural network with non-linear outputs. We are not going to discuss these approximations in depth as we want to focus more on the sparsity based blind source separation. However, FastICA and JADE are introduced below.\\
+ICA algorithms are about devising appropriate independence approximations. This includes, maximisation of non-Gaussianity, minimisation of mutual information and maximum likelihood estimation \cite{HYVARINEN2000411}. We are not going to discuss all these approximations in depth as we want to focus more on the sparsity based blind source separation. Only the FastICA and JADE are introduced below.\\
 
-FastICA calculates the negentropy as an approximate of independence measure. With a taste of the Central Limit Theorem, intuition tells us that the distribution of a sum of independent random variables tends to toward a Gaussian distribution, under certain conditions. Known from Equation (\ref{estimationYandZ}) that $y = w^T x = w A s = z^T s$. It is clear that the closest estimation is when $z^Ts = s$ which also has the least Gaussianity. Hence finding independent $s$ is equivalent to minimisation of Gaussianity. The approximation of non-Gaussianity is based on a maximum negentropy principle.
+FastICA calculates the negentropy as an approximate of independence measure. With a taste of the central limit theorem, intuition tells us that the distribution of a sum of independent random variables tends to toward a Gaussian distribution, under certain conditions. Known from Equation (\ref{estimationYandZ}) that $y = w^T x = w A s = z^T s$. It is clear that the closest estimation is when $z^Ts = s$ which also has the least Gaussianity. Hence finding independent $s$ is equivalent to minimisation of Gaussianity. The approximation of non-Gaussianity is based on a maximum negentropy principle.
 \begin{equation}
     J(y) \propto [E\{G(y)\} - E\{G(v)\}]^2
 \end{equation}
@@ -130,10 +128,10 @@ Estimation of $\hat{\mathbf{A}}$
 JADE is based on similar ideas of the FastICA agorithm apart from it calculates the fourth-order statistics (Kurtosis). JADE finds out the direction where the kurtosis of observed signal grows most strongly (super-Gaussian signals) or decreases most strongly (sub-Gaussian signals).\\
 
 \label{ica_defect}
-ICA suffers from several limitations which make it unsuitable in some specific applications. Firstly, ICA require the mixing matrix $\mathbf{A}$ to be full rank and square. As we mentioned in the introdcution, generally ICA cannot be applied to the underdetermined mixing scenario. Secondly, ICA also assumes that amongst the components in $\mathbf{s}$, there exists at most one component that is Gaussian. This means ICA is not robust under the additive Gaussian nosie setting. While even implicit, the ICA algorithm requires information on the source distribution when doing separating computation such as maximum likelihood estimation, making it hard for model generalisation. We will exam the limitations of ICA in future simulations.
+ICA suffers from several limitations which make it unsuitable in some specific applications. Firstly, ICA require the mixing matrix $\mathbf{A}$ to be full rank and square. As we mentioned in the introdcution, generally ICA cannot be applied to the underdetermined mixing scenario. Secondly, ICA also assumes that amongst the components in $\mathbf{S}$, there exists at most one component that is Gaussian. This means ICA is not robust under the additive Gaussian nosie setting. While even implicit, the ICA algorithm requires information on the source distribution when doing separating computation such as maximum likelihood estimation, making it hard for model generalisation. We will exam the limitations of ICA in future simulations.
 
 \subsection{Sparse representations of signals}
-Here we introduces the idea of sparse signal processing and how it helps to solve underdetermined linear systems (dictionary). However we need to discriminate the expression from the underdetermined system mentioned in previous parts. In BSS, `underdetermined system' means linear combination of \textbf{source signals} while here we refer to further linearly decompose the source signals into a given \textbf{dictionary}. In a more plain language, less number of examples than the data dimensionality involved are available for learning the dictionary. Sparse signal processing has numerous applications in compress sensing, image deniosing and super-resulation reconstrcution.
+Here we introduces the idea of sparse signal processing and how it helps to solve underdetermined linear systems (dictionary). First we need to articulate the expression from the underdetermined system mentioned in previous parts. In BSS, `underdetermined system' means linear combination of \textbf{source signals} whereas here we refer to further linearly decompose the source signals into a given \textbf{dictionary}. In a more plain language, less number of examples than the data dimensionality involved are available for learning the dictionary. Sparse signal processing has numerous applications in compress sensing, image deniosing and super-resulation reconstrcution.
 
 \subsubsection{Overcomplete dictionary}
 \label{over_dict}
@@ -165,7 +163,7 @@ The decomposition problem of a signal or image in predefined $\mathbf{\Phi}$ amo
     \min_{\alpha}||\alpha||_0 \quad \text{s.t.} \quad y = \alpha \mathbf{\Phi}
 \end{equation}
 
-However, the above equation leads to an NP-heard optimisaation problem due to its non-convextivity. Alternatively, we convexify the constraint by substituting the convex $\ell_1$-norm with the $\ell_0$-norm, leading to the following equation:
+However, the above equation leads to an NP-heard optimisation problem due to its non-convextivity. Alternatively, we convexify the constraint by substituting the convex $\ell_1$-norm with the $\ell_0$-norm, leading to the following equation:
 \begin{equation}
     \min_{\alpha} ||\alpha||_1 \quad \text{s.t.} \quad y = \alpha \mathbf{\Phi} 
     \label{l1_sparse}
@@ -176,13 +174,10 @@ or\\
 \end{equation}
 
 Such relaxations have led to a wide range of algorithms for signal reconstruction: the \textit{Basis Pursuit} based on linear programming  \cite{BPAtomicDcomp}, the greedy algorithm such as \textit{Matching Pursuit} \cite{Mallat_Zhang1993} and subspace techniques such as \textit{Subspace Pursuit} \cite{WdaiSP} and \textit{CoSaMP} (Compressive
-Sampling Matching Pursuit) \cite{CoSaMP2008}.
+Sampling Matching Pursuit) \cite{CoSaMP2008}. In the next section, we provide essential insights into the use of sparsity in BSS and we highlight the central role played by morphological diversity as a way of contrast between the sources.
 
 
-\subsection{Sparsity and morphological Diversity}
-In this section, we provide essential insights into the use of sparsity in BSS and we highlight the central role played by morphological diversity as a way of contrast between the sources.
-
-\subsubsection{Morphological component analysis (MCA)}
+\subsection{Morphological component analysis (MCA)}
 We now introduce a practical algorithm named the morphological component analysis (MCA) aiming at decomposing signals in overcomplete dictionaries composed of a union of orthonormal basis, i.e. our dictionary is a concatenation of sub-dictionaries. In MCA setting, $y$ is a linear combination of $D$ morphological components. 
 \begin{equation}
     y = \sum_{i=1}^D  \alpha_i \mathbf{\Phi}_i = \sum_{i=1}^D \varphi_i
@@ -192,12 +187,12 @@ where $\mathbf{\{\Phi}_i\}$ are orthonormal basis whose columns are the atoms an
 \begin{equation}
     \forall\{i,j\} \in \{1,\cdots,D\};\quad j \neq i \Rightarrow \; \lVert \varphi_i \Phi_i^T \rVert_0 < \lVert \varphi_j \Phi_i^T \rVert_0
 \end{equation}
-Intuitively, we can always find a sub-dictionary that one morphological component is highly sparse in it whereas other components are not sparse. We therefore estimate the morphological components $\{\varphi_i\}_{i=1,\cdots,D}$ by solving the following convex minimisation problem.
+Intuitively, we can always find a sub-dictionary that one morphological component is highly sparse in it whereas other components are not very sparse. We therefore estimate the morphological components $\{\varphi_i\}_{i=1,\cdots,D}$ by solving the following convex minimisation problem.
 \begin{equation}
     \{\varphi_i\} = \text{Arg} \: \min_{\{\varphi_i\}}\sum_{i=1}^D \lVert\varphi_i \mathbf{\Phi}_i^T \rVert_{1} + k \:\lVert y-\sum_{i=1}^D\varphi_i \rVert^2_2 +  \sum_{i=1}^D \gamma_i C_i (\varphi_i)
     \label{MCAequation}
 \end{equation}
-where $C_i$ implements constraints on component $\varphi_i$. Note that this minimisation problem differs from the problem setting in Equation (\ref{l1_sparse}) by relaxing the equality constraints to the later punishment term. A fast numerical solver called the \textit{Block-Coordinate Relaxation Method} \cite{BlockCoordinateMethod} was proposed to solve this kind of optimisation problem. 
+where $C_i$ implements constraints (e.g. TV correction) on component $\varphi_i$. Note that this minimisation problem differs from the problem setting in Equation (\ref{l1_sparse}) by relaxing the equality constraints to the later punishment term. A fast numerical solver called the \textit{Block-Coordinate Relaxation Method} \cite{BlockCoordinateMethod} was proposed to solve this kind of optimisation problem. 
 The algorithm is given as follows:
 
 \begin{algorithm}
@@ -223,7 +218,7 @@ Each morphological components $S_k$\\
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Mutichannel morphological component analysis (MMCA)}
+\subsection{Mutichannel morphological component analysis (MMCA)}
 In this section, we extend the monochannel sparse decomposition problem described and characterized in last section to multichannel data. In the MMCA setting, we assumed that the sources $\mathbf{S}$ in Equation (\ref{mixing}) have strictly different morphologies (i.e. each source $s_i$ is assumed to be strictly sparsely represented in one particular orthonormal basis $\mathbf{\Phi}_i$) \cite{BobinJ_2007SaMD}. Figure \ref{illu_mca_and_gmca} precisely reveals the difference between MCA and MMCA. The top observation can be strictly divided in to texture and gaussian parts whereas the bottom multichannel observations are complex combinations of curvelets and texure components.\\
 
 \begin{figure}[!htbp]
@@ -283,8 +278,8 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$
 \end{algorithm}
 
 
-\subsubsection{Generalised morphological component analysis (GMCA)}
-We now apply the idea of morphological diversity to blind source separation. In GMCA, we assume easch source is modelled as a weighted sum of $D$ morphological components where each component is sparsely represented in a specific basis.
+\subsection{Generalised morphological component analysis (GMCA)}
+We now apply the idea of morphological diversity to more generalised blind source separation problems. In GMCA, we assume easch source is modelled as a weighted sum of $D$ morphological components where each component is sparsely represented in a specific basis.
 GMCA pursuits an unmixing scheme, through the estimation of $\mathbf{A}$, which leads to the sparsest sources $\mathbf{S}$ in the dictionary $\mathcal{D}$. This is expressed in a Lagrangian form:
 
 \begin{equation}
@@ -320,15 +315,15 @@ Estimation $\tilde{\mathbf{A}}$ and $\tilde{\mathbf{S}}$
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Fast GMCA algorithm (FGMCA)}
-In the last section, we described GMCA algorithm which needs the projection of the residual into the dictionary space at each iteration $\tilde{\alpha}_{ik} = \lambda_{\delta}(r_{ik}\mathbf{\Phi}_k^T)$. Note that the application of $\mathbf{\Phi}_k^T$ has consumed most of the computation power. Thus, GMCA could be very computationally demanding for large scale, high dimensional problems \cite{BobinJ_2007SaMD}. In practice, we apply the an improved version coined fast GMCA by adding some assumptions to the original problem.\\
+\subsection{FastGMCA algorithm (FGMCA)}
+In the last section, we described GMCA algorithm which needs the projection of the residual into the dictionary space at each iteration $\tilde{\alpha}_{ik} = \lambda_{\delta}(r_{ik}\mathbf{\Phi}_k^T)$. Note that the application of $\mathbf{\Phi}_k^T$ will consume most of the computation power. Thus, GMCA could be very computationally demanding for large scale, high dimensional problems \cite{BobinJ_2007SaMD}. In practice, we apply the an improved version coined fast GMCA by adding some assumptions to the original problem.\\
 
 We assume each row of $\mathbf{\Theta_X}=\mathbf{X}D^T$ stores the decomposition of each observed channels in $D$. And each row of $\mathbf{\Theta_S}=\mathbf{S}D^T$ stores the decomposition of each source. 
 If the supports ($\ell_0$ decompostion) of $\mathbf{X}$ and $\mathbf{S}$ satisfies 
 \begin{equation}
     \Delta_D(x_i) = \sum_{j=1}^{n}\alpha_{ij}\Delta(s_j)
 \end{equation}
-Then we can rewrite the Lagrangian form \label{GMCAequation} as follows.
+Then we can rewrite the Lagrangian form as follows.
 
 \begin{equation}
     \{\mathbf{\tilde{A},\tilde{S}}\} = \text{Arg} \: 
@@ -336,7 +331,7 @@ Then we can rewrite the Lagrangian form \label{GMCAequation} as follows.
 \label{fast-gmca}
 \end{equation}
 
-To conclude, the fast GMCA algorithm works in the sparse transformed domain and omits the dictionary decomposition process at each iteration. Now write fast GMCA in a step-wise flavour.
+To conclude, the fast GMCA algorithm works in the sparse transformed domain and omits the dictionary decomposition process at each iteration. Thus we can precompute the projection of the mixtures in, for example the wavelet domain and run the FastGMCA algorithm in that domain. This will significantly accelerate our blind separation process. Now write fast GMCA in a stepwise flavour.
 
 \begin{algorithm}[!htbp] 
 \caption{The numerical algorithm for FastGMCA}
@@ -363,21 +358,20 @@ Estimation $\tilde{\mathbf{A}}$ and $\tilde{\mathbf{S}}$
 \subsection{Blind source separation based on adaptive dictionary learning}
 In previous sessions, we mentioned about sparse decomposition using prescribed overcomplete dictionaries such as Wavelet, Curvelet or unions of orthonormal transform bases. This method works well when the original sources have components that are largely different from each other in the transform domain. However, this may not lead to the most sparsified decomposition of each individual sources, or in another word, the dictionaries found may not be appropriate in the sense that they may fit better the mixtures rather than the sources.\\
 
-As described before, dictionary learning has wide applications in compress sensing and image denoising. Apart from the pursuit algorithms described in \ref{over_dict} that finds the sparse coefficients with respect to a given dictionary. Recent research is concentrated on obtaining a adapting dictionary in order to achieve best sparse signal representations. Michal Aharon designed the K-SVD \cite{AharonM2006KAaf} algorithm which uses a K-means clustering like algorithm and columnwise updating flavor of the dictionary atoms. Dai and Tao proposed the SimCo method \cite{6340354} based on K-SVD which avoids falling into a singular point during the optimisation process. It is worthy noting that these methods only gives an appropriate solution to the dictionary learning problem formulated in in Equ.(\ref{equ14}), finding a global minima is still an open question.\\
+As described before, dictionary learning has wide applications in compress sensing and image denoising. Apart from the pursuit algorithms described in \ref{over_dict} that finds the sparse coefficients with respect to a given dictionary. Recent research is concentrated on obtaining a adapting dictionary in order to achieve best sparse signal representations. Michal Aharon designed the K-SVD \cite{AharonM2006KAaf} algorithm which uses a K-means clustering like algorithm and columnwise updating flavor of the dictionary atoms. Dai and Tao proposed the SimCo method \cite{6340354} based on K-SVD which avoids falling into a singular point during the optimisation process. It is worthy noting that these methods only gives an appropriate solution to the dictionary learning problem formulated in in Equ.(\ref{equ14}), but finding a global minima (for sure) is still an open question.\\
 \begin{equation}
     \min_{\alpha}||\alpha||_1 \quad \text{s.t.} \quad || \mathbf{Y} - \mathbf{X} \mathbf{\Phi}||^2 \leq \sigma
     \label{equ14}
 \end{equation}
-Motivated by the idea of image denoising we can adapt MMCA to learned local dictionaries from the mixed sources within the separation process\cite{VAbolghasemi2012}. Hence we does not need any prior knowledge about the sparse domain of the sources. We now introduce the K-SVD dictionary learning algorithm that will be applied later in experiment section.\\
+Motivated by the idea of image denoising we can adapt MMCA to learned local dictionaries from the mixed sources within the separation process\cite{VAbolghasemi2012}. Hence we does not need any prior knowledge about the sparse domain of the sources. We now introduce the K-SVD dictionary learning algorithm which will be applied later in experiment section.\\
 
-\subsubsection{K-SVD}
-The K-SVD algorithm involves two basic steps, which together constitute the algorithm iteration: (i) the signals in X are sparse-coded given the current dictionary estimate, producing the sparse representations matrix Γ, and (ii) the dictionary atoms are updated given the current sparse representations; see Algorithm 3. The sparse-coding part (line 5) is commonly implemented using OMP. The dictionary update (lines 6-13) is performed one atom at a time, optimizing the target function for each atom individually while keeping the rest fixed.\\
-
-The K-SVD algorithm can be decomposed into two stages, which are executed alternatively as what we did in the iterative relaxation method. First we can use any pursuit algorithm (BP, OMP) to calculate the sparse coefficients $\mathbf{X}$. This is called the sparse coding stage. Then we proceed to the codework update stage. In Equ.(\ref{equ14}), assuming that both $\mathbf{\Phi}$ and $\mathbf{X}$ is fixed and we only consider one atom $\phi_k$ in dictionary $\mathbf{\Phi}$ and the coefficients $x^k$ ($k^{th}$ row in $\mathbf{X}$) corresponding to it, the penalty term in the objective function can be rewritten as
+\subsubsection{K-SVD Dictionary learning}
+% The K-SVD algorithm involves two basic steps, which together constitute the algorithm iteration: (i) the signals in X are sparse-coded given the current dictionary estimate, producing the sparse representations matrix Γ, and (ii) the dictionary atoms are updated given the current sparse representations; see Algorithm 3. The sparse-coding part (line 5) is commonly implemented using OMP. The dictionary update (lines 6-13) is performed one atom at a time, optimizing the target function for each atom individually while keeping the rest fixed.\\
+The K-SVD algorithm can be decomposed into two stages, which are executed alternatively as what we did in the iterative relaxation method. First we can use any pursuit algorithm (BP, OMP) to calculate the sparse coefficients $\mathbf{X}$. This is called the sparse coding stage. Then we proceed to the codeword update stage. In Equation (\ref{equ14}), assuming that both $\mathbf{\Phi}$ and $\mathbf{X}$ is fixed and we only consider one atom $\phi_k$ in dictionary $\mathbf{\Phi}$ and the coefficients $x^k$ ($k^{th}$ row in $\mathbf{X}$) corresponding to it, the penalty term in the objective function can be rewritten as
 
 \begin{equation}
 \begin{split}
-    ||\mathbf{Y} - \mathbf{\Phi x} ||^2 & = || \mathbf{Y} - \sum_{j=1}^K \phi_j x^j_T||^2\\
+    ||\mathbf{Y} - \mathbf{\Phi X} ||^2 & = || \mathbf{Y} - \sum_{j=1}^K \phi_j x^j_T||^2\\
     & = ||(\mathbf{Y} - \sum_{j\neq k} \phi_j x^j_T ) - \phi_k x_T^k||^2\\
     & = || \mathbf{E}_k - d_k x_T^k ||^2
 \end{split}
@@ -393,8 +387,7 @@ In order to force the sparsity in $\mathbf{X}$, we need to extract the columns i
     \mathbf{E}_k &= \Omega_k\mathbf{E}_k
 \end{aligned}
 \end{equation}
-
-Hence we have split the term $\mathbf{\Phi X}$ to $k$ rank-1 matrices. Among those, only the $k^{th}$ atom remains in the question. This is a least square problem that can be directly solved using singular value decomposition (SVD). 
+$\Omega_k$ is a mask consisting 0 and 1s so that we only consider atoms that refer to a certain row in the sparse coefficients. Hence we have split the term $\mathbf{\Phi X}$ to $k$ rank-1 matrices. Among those, only the $k^{th}$ atom remains in the question. This is a least square problem that can be directly solved using singular value decomposition (SVD). 
 \begin{equation}
     \mathbf{E}_k = U\Sigma V^T
 \end{equation}
@@ -420,7 +413,7 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
 \STATE 4. for $L_{max}$ iterations:\\
 \quad \quad for $j = 1:N$:\\
 \quad \quad \quad - Extract patches from $x_j$.\\
-\quad \quad \quad - Solve the sparse recovery problem and get coefficients $\alpha$ by soft-thresholding.\\
+\quad \quad \quad - Update coefficient $a_j$ using OMP.\\
 \quad \quad \quad - Update $\Phi_j$ using K-SVD.\\
 \quad \quad \quad - Calculate the residual $\mathbf{E_j} = \mathbf{Y} - \sum_{l\neq j}a_lx_l^T$. \\
 \quad \quad \quad - Compute $x_j$. \\
