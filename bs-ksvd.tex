@@ -4,7 +4,7 @@ Last section proves the strength of sparsity based methods applied to blind sour
 A variety of sparse dictionary learnging algorithm have been proposed in the literature for this purpose, based on the K-SVD algorithm. The block-sparse dictionary learning algorithm is proposed by Lihi in \cite{dictionary_block_sparse}. It exploits the hidden structure that is intrinsic in the signals for producing more efficient sparse representations. In the following content, we introduce the theory of this algorithm and try to embed it in the blind source separation process. The algorithm consists of two steps: a block structure update step (SAC) and a dictionary update step (BK-SVD). \\
 
 \subsection{Problem definition}
-Given a set of signals $\mathbf{Y} = \{y_i\} \in R^N$, we wish to find an overcomplete dictionary $\mathbf{\Phi}$ in $R^{N \times K}$ whose atoms are sorted in blocks, correspondingly the non-zero coefficients representations $\mathbf{X} = \{x_i\}$ are concentrated in a fixed number of blocks. More specifically, suppose dictionary atoms sorted in blocks that enable \textbf{block-sparse} representations of input signals. Each block has its own label, indexed as $d_i$. We claim that a vector $\mathbf{X}\in R^K$ is $k$-block-sparse over $d$ if its non-zero entries are concentrated in $k$ blocks only. This is denoted by 
+Given a set of signals $\mathbf{Y} = \{y_i\} \in R^N$, we wish to find an overcomplete dictionary $\mathbf{\Phi}$ in $R^{N \times K}$ whose atoms are sorted in blocks, correspondingly the non-zero coefficients representations $\mathbf{X} = \{x_i\}$ are concentrated in a fixed number of blocks. More specifically, suppose dictionary atoms sorted in blocks that enable \textbf{block-sparse} representations of input signals. Each block has its own label, indexed as $d_i$. We claim that a vector $\mathbf{X}\in R^K$ is $k$-block-sparse over $d$ if its non-zero entries under certain block strucutre is less than $k$. This is denoted by 
 \begin{equation}
     ||x||_{0,d} = k
 \end{equation}
@@ -31,7 +31,7 @@ where $d_j$ is the set of indices belonging to block $j$, $s$ is the maximum blo
 is the total number of blocks (number of dictionary columns divided by the block size). When the maximal block size is set to 1, the proposed algorithm reduces to normal K-SVD.\\
 
 
-\subsection{Algorithm Preview}
+\subsection{Algorithm preview}
 Like other optimisation problems in previous sections, the problem in Equation (\ref{bskvsd_1}) is non-convex. We therefore adopt the coordinate relaxation technique. The initial dictionary can be set up as a DCT dictionary or any random collection of $K$ signals. Then the block structure is solved by the \textit{sparse aggolmerative clustering} (SAC) algorithm\cite{Johnson1967}. Agglomerative clustering is a `bottom-up' approach who groups according to distance metric (i.e. $\ell_0$ norm). SAC algorithm solves for an optimal block structure refer to input command ($k$ and $s$) while keeping the dictionary fixed.
 
 \begin{equation}
@@ -102,7 +102,7 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
 \end{algorithm}
 
 
-\subsection{Complexity Analysis}
+\subsection{Complexity analysis}
 The standard algorithm for agglomerative clustering (SAC) has a time complexity of ${\displaystyle {\mathcal {O}}(K^{3})}$ (K is the number of dictionary atoms in this occasion). This makes it not suitable for even medium datasets. However the complexity of BK-SVD requires $s$ times less number of singular value computations than the K-SVD algorithm. Because of the simultaneous updating of atoms belong to the same block.
 As proved in \cite{OMP_KSVD}, K-SVD algorithm has a complexity of $\displaystyle {\mathcal {O}}((ks)^2K + 2NK)$. Because of the block nature of BK-SVD, we expect BK-SVD to have a complexity of $\displaystyle {\mathcal {O}}((k)^2K + 2NK)$, where $k$ is the sparsity level (number of sparse blocks) and $s$ is the maximal block size. The total compexity of combined SAC+BK-SVD is therefore $\displaystyle {\mathcal {O}}((k)^2K + 2NK+K^3)$. Therefore the overall convergence rate of the proposed BSS framework will be slower than simple K-SVD method.\\
 

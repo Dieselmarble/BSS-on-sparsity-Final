@@ -60,25 +60,21 @@ Most BSS methods assumes the data to be zero centered. The most basic and necess
 2. Whitening:
 Before applying BSS methods (and after centering), the observed vector $x$ is linearly transformed to $\tilde{x}$ so that each column is uncorrelated and have unity variance. More specifically, the covariance matrix of $\tilde{x}$ equals the identity martix, $\E\{\tilde{x}\tilde{x}^T\} = \mathbf{I}$. The most common used whitening transformation is eigenvalues decompostion (EVD) of the data covariance matrix.
 
-\subsection{BSS Performance Measures}
+\subsection{BSS performance measures}
 \label{perform_metric}
-
-\subsubsection{Correlation coefficient}
-Correlation coefficient measures the similarity between a recovered source $S^{'}$ and the original source $S$. Larger correlation coefficients indicate the original sources are better recovered.
+1. Correlation coefficient measures the similarity between a recovered source $S^{'}$ and the original source $S$. Larger correlation coefficients indicate the original sources are better recovered.
 \begin{equation}
     \rho = \frac{\text{cov}(S^{'},S)}{\sigma_x \sigma_y}
 \end{equation}
 
-\subsubsection{Mixing matrix criterion}
-Mixing Matrix Criterion assesses the separation quality due to demixing matrix $\mathbf{A}$, especially in noisy content.
+2. Mixing Matrix Criterion assesses the separation quality due to demixing matrix $\mathbf{A}$, especially in noisy content.
 \begin{equation}
     C_A = ||\mathbf{I_n} - P\tilde{\mathbf{A}}^{+}\mathbf{A} ||
 \end{equation}
 
 where $\mathbf{I}$ is the identity matrix, $\mathbf{P}$ is the permutation matrix, and $\tilde{\mathbf{A}}^{+}$ is the pseudo-inverse of the estimated mixing matrix. The mixing matrix criterion is strictly positive, unless the mixing matrix is correctly estimated up to scale and permutation \cite{VAbolghasemi2012}. Low values of $C_A$ then indicate better separation performance.
  
-\subsubsection{Human visual system (HVS)}
-Most of out work in this report focus on blind image separation. Human visual system says that people are not as sensitive to high frequency detail as to low frequency ones. Therefore, standard metrics may not best describe the actual experiment outcomes. In order to better evaluate the results in image processing, we adopt HVS as the subjective metric.
+3. Human visual system (HVS): Most of out work in this report focus on blind image separation. Human visual system says that people are not as sensitive to high frequency detail as to low frequency ones. Therefore, standard metrics may not best describe the actual experiment outcomes. In order to better evaluate the results in image processing, we adopt HVS as the subjective metric.
 
 \subsection{Applications of BSS}
 The classical application of BSS on the cocktail party problem is trying to understand how the humans select the voice of a particular speaker from an ensemble of different voices corrupted by music and noise in the background. Other applications, besides the cocktail party problem mentioned in the introduction, have also attracted researchers' attention in the past decade. Examples are given as below. \\
@@ -99,7 +95,7 @@ In Code-Division Multiple Access (CDMA), blind separation techniques are used to
 
 BSS is also closely related with studying the underlying factors of the financial data and driving mechanisms behind financial time series. In \cite{OjaE2000Icaf} ICA is applied to financial time series data. The data is parallel, representing the simultaneous cash flow at several stores belonging to the same retail chain. The ICA finds the fundamental factors that are common to all stores that affect the cashflow data, although each store responds to these factors in a slightly different manner. Thus, the cashflow effect of the factors specific to any particular store could be revealed.
 
-\subsection{Independent Component Analysis}
+\subsection{Independent component analysis}
 ICA algorithms are about devising appropriate independence approximations. This includes, maximisation of non-Gaussianity, minimisation of mutual information and maximum likelihood estimation \cite{HYVARINEN2000411}. We are not going to discuss all these approximations in depth as we want to focus more on the sparsity based blind source separation. Only the FastICA and JADE are introduced below.\\
 
 FastICA calculates the negentropy as an approximate of independence measure. With a taste of the central limit theorem, intuition tells us that the distribution of a sum of independent random variables tends to toward a Gaussian distribution, under certain conditions. Known from Equation (\ref{estimationYandZ}) that $y = w^T x = w A s = z^T s$. It is clear that the closest estimation is when $z^Ts = s$ which also has the least Gaussianity. Hence finding independent $s$ is equivalent to minimisation of Gaussianity. The approximation of non-Gaussianity is based on a maximum negentropy principle.
