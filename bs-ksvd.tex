@@ -1,7 +1,7 @@
 \section{Block Sparse K-SVD algorithm applied to BSS}
 Last section proves the strength of sparsity based methods applied to blind source separation problem. Inspired by using adaptively learned local dictionary in MMCA/GMCA, we aim to create a new adaptive dictionary learning algorithm combined with BSS. The idea driven behind is simple that, certainly will we acquire a better separation result if we improve the level of sparsity of the dictionary,.\\
 
-A variety of sparse dictionary learnging algorithm have been proposed in the literature for this purpose, based on the K-SVD algorithm. The block-sparse dictionary learning algorithm is proposed by Lihi in \cite{dictionary_block_sparse}. It exploits the hidden structure that is intrinsic in the signals for producing more efficient sparse representations. In the following content, we introduce the theory of this algorithm and try to embed it in the BSS process. \\
+A variety of sparse dictionary learnging algorithm have been proposed in the literature for this purpose, based on the K-SVD algorithm. The block-sparse dictionary learning algorithm is proposed by Lihi in \cite{dictionary_block_sparse}. It exploits the hidden structure that is intrinsic in the signals for producing more efficient sparse representations. In the following content, we introduce the theory of this algorithm and try to embed it in the BSS process. The algorithm consists of two steps: a block structure update step (SAC) and a dictionary update step (BKSVD). \\
 
 \subsection{Problem definition}
 Given a set of signals $\mathbf{Y} = \{y_i\} \in R^N$, we wish to find an overcomplete dictionary $\mathbf{\Phi} \ in R^{N\time K}$ whose atoms are sorted in blocks, correspondly the non-zero coefficients representations $\mathbf{X} = \{x_i\}$ are concentrated in a fixed number of blocks. More specifically, suppose dictionary atoms sorted in blocks that enable \textbf{block-sparse} representations of input signals. Each block has its own label, indexed as $d_i$. We claim that a vector $\mathbf{X}\in R^K$ is $k$-block-sparse over $d$ if its non-zero entries are concentrated in $k$ blocks only. This is denoted by 
@@ -32,9 +32,7 @@ is the total number of blocks (number of dictionary columns divided by the block
 
 
 \subsection{Algorithm Preview}
-Like other optimisation problems in previous sections, the problem in Equation \ref{bskvsd_1} is a nonconvex. We therefore adopt the coordinate relaxation technique. The initail dictionary can be set up as a DCT dictionary or any random collection of $K$ signals. Then the block structure is solved by the \textit{sparse aggolmerative clustering} (SAC) algorithm\cite{Johnson1967}. Agglomerative clustering is a `bottom-up' approach who groups according to distance metric (e.g. $\ell_0$ norm).\\
-
-SAC algorithm solves for an optimal block structure refer to input command ($k$ and $s$) while keeping the dictionary fixed.
+Like other optimisation problems in previous sections, the problem in Equation \ref{bskvsd_1} is a nonconvex. We therefore adopt the coordinate relaxation technique. The initail dictionary can be set up as a DCT dictionary or any random collection of $K$ signals. Then the block structure is solved by the \textit{sparse aggolmerative clustering} (SAC) algorithm\cite{Johnson1967}. Agglomerative clustering is a `bottom-up' approach who groups according to distance metric (e.g. $\ell_0$ norm). SAC algorithm solves for an optimal block structure refer to input command ($k$ and $s$) while keeping the dictionary fixed.
 
 \begin{equation}
 \begin{aligned}
@@ -44,6 +42,18 @@ SAC algorithm solves for an optimal block structure refer to input command ($k$ 
 \end{aligned}
 \end{equation}
 
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{images/flow_chart.png}
+\caption{(a) A flow chart about the SAC algorithm; (b) A stepwise example of the SAC algorithm.}
+\label{flow_sac}
+\end{figure}
+
+Figure (\ref{flow_sac}) presents a detailed example of the clustering process of the SAC algorithm. In this example, the maximal block size is set to be 2. At the first iteration, row 1 and row 3 in the dictionary has the largest intersection, by which means their $\ell_0$ norm has the largest similarity ($\omega = \{1,4\}$). Consequently, they are merged together. In the next step, row 2 and row 4 have the largest intersection and are merged. Up to now, no acquisitions an be further executed because of the maximal block size is limited by 2. \\
+
+One may wonder that the SAC algorithm only deals with the sparse coefficients but not the dictionary directly. This is because rows of the coefficients $\mathbf{X}$ exhibits a similar pattern on non-zeros as the columns of the dictionary block. In other words, grouping coefficients is equivalent to grouping the dictionary atoms according to the sparsity pattern. Furthermore, merging blocks is always beneficial to the reconstruction accuracy of one dictionary, due to the reconstruction result is a liner summation of atoms, grouping only rewrite the coefficients in $\mathbf{X}$.
+
+
 After having successfully recovered the optimal block structure. We then solve for new dictionary while keeping $d^{m}$ fixed. The objective function becomes.
 \begin{equation}
 \begin{aligned}
@@ -52,7 +62,7 @@ After having successfully recovered the optimal block structure. We then solve f
 \end{aligned}
 \label{BKSVD1}
 \end{equation}
-The author in \cite{dictionary_block_sparse} proposed \textit{block K-SVD} (BK-SVD), a natural extension of the K-SVD algorithm to solve (\ref{BKSVD1}). BK-SVD algorithm employs a similar columnwise atom updating manner as in K-SVD but forces the learned dictionary to have higher sparsity level.\\
+The author in \cite{dictionary_block_sparse} proposed \textit{block K-SVD} (BK-SVD), a natural extension of the K-SVD algorithm to solve (\ref{BKSVD1}). BK-SVD algorithm employs a similar `columnwise' atom updating manner as in K-SVD but forces the learned dictionary to have higher sparsity level.\\
 
 We first fix $\mathbf{\Phi}^{m-1}$ and can use any pursuit method (e.g. OMP) to solve (\ref{BKSVD1}) which reduces to.
 
@@ -63,27 +73,38 @@ We first fix $\mathbf{\Phi}^{m-1}$ and can use any pursuit method (e.g. OMP) to 
 \end{aligned}
 \end{equation}
 
-Then, to obtain $\mathbf{\Phi}^{(m)}$, fix $\mathbf{X}^{(m)}$, $d$ and $\mathbf{Y}$. The calculation procedure is same as K-SVD, where the blocks in the dictionary is updated sequentially, alongside with the corresponding nonzero coefficients in $\mathbf{X}^{(m)}$.\\
+Then, to obtain $\mathbf{\Phi}^{(m)}$, fix $\mathbf{X}^{(m)}$, $d$ and $\mathbf{Y}$. The calculation procedure is same as K-SVD, where the blocks of atoms (not standalone atoms) in the dictionary is updated sequentially, alongside with the corresponding nonzero coefficients in $\mathbf{X}^{(m)}$.\\
 
-The complexity of BKSVD requires $b_s$ times less number of SVD computations than the KSVD algorithm. Their for the convergence rate of BKSVD is significantly faster than KSVD. As proved in \cite{OMP_KSVD}, K-SVD algorithm has a complexity of $O((k)^2K + 2NK)$. Because of the block nature of BK-SVD, we expect BK-SVD to have a complexity of $O((k)^2K + 2NK)$, where $k$ is the sparsity level (number of sparse blocks) and $s$ is the maximal block size.\\
+We have now introduced the whole block sparse dictionary learning algorithm. Extend the idead of K-SVD + MMCA algorithm, we can replace the step of calculating sparse coefficients and dictionary atoms by the SAC+BK-SVD algorithm just porposed. The overall BSS framework using SAC+BK-SVD is summarised below.
 
-We have now introduced the whole block sparse dictionary learning algorithm. The overall framework of SAC+BK-SVD is summarised below,
 \begin{algorithm}[!htbp] 
-\caption{Block-sparse Dictionary Update}
+\caption{The numerical algorithm for SAC + BK-SVD + MMCA} 
 \label{alg:Framwork} 
 \begin{algorithmic}
 \REQUIRE ~~\\%Input
-The input signal $\mathbf{Y}$, block sparsity level $k$, and maximal block size $s$.\\
+The sources $S$, dictionary $\Phi$, number of morphological components $N$, number of iterations $L_{max}$ and threshold $\delta^{(0)} = k \cdot L_{max}$.
 \ENSURE ~~\\ %Output
-Learned Dictionary $\mathbf{\Phi}$ with optimal block struture $d$.\\
---------------------------------------------------------\\
-\STATE 1. Initialise the dictionary $D(0)$ as the outcome of K-SVD.\\
-\STATE 2. For $N$ number of iterations.\\
-\STATE \quad - Fix dictionary $\mathbf{\Phi}^{(m-1)}$ and update coefficients $x^{m}$ and block structure $d^{(m)}$ by applying sparse agglomerative clustering.\\
-\STATE \quad - Fix the block structure $d^(m)$ and update the dictionary atoms $\mathbf{\Phi}^{(m)}$ by applying BS-SVD.\\
+Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
+
+\STATE 1. Initialse $\mathbf{\Phi}$ to a known overcomplete dictionary.\\
+\STATE 2. Set $\mathbf{A}$ to a radom column-normalised matrix.\\
+\STATE 3. $\mathbf{X} = A^T Y$.\\
+
+\STATE 4. for $L_{max}$ iterations:\\
+\quad \quad for $j = 1:N$:\\
+\quad \quad \quad - Extract patches from $x_j$.\\
+\quad \quad \quad - Fix dictionary $\mathbf{\Phi}^{(m-1)}$ and update coefficients $x^{m}$ and block structure $d^{(m)}$ by applying sparse agglomerative clustering.\\
+\quad \quad \quad- Fix the block structure $d^(m)$ and update the dictionary atoms $\mathbf{\Phi}^{(m)}$ by applying BS-SVD.\\
+\quad \quad \quad - Calculate the residual $\mathbf{E_j} = \mathbf{Y} - \sum_{l\neq j}a_lx_l^T$. \\
+\quad \quad \quad - Compute $x_j$. \\
+\quad \quad \quad - Calculate mixing matrix column $a_j = \mathbf{E_j}x_j$ \\
+\quad \quad \quad - Normalise $a_j$  \\
+\STATE 5. Decrease $\sigma$ until stopping criterion is met. \\
 \end{algorithmic}
 \end{algorithm}
+The key difference between K-SVD and BK-SVD is that, only the highest rank component of the residual is updated, resulting in one atom change. Conversely, in BK-SVD atoms in the same block can be updated simultaneously.
 
 \subsection{Complexity Analysis}
-The standard algorithm for hierarchical agglomerative clustering has a time complexity of ${\displaystyle {\mathcal {O}}(K^{3})}$ (K is the number of dictionary atoms in this occasion). which makes it too slow for even medium data sets.
-\clearpage
+The standard algorithm for agglomerative clustering (SAC) has a time complexity of ${\displaystyle {\mathcal {O}}(K^{3})}$ (K is the number of dictionary atoms in this occasion). This makes it not suitable for even medium data sets. However the complexity of B-KSVD requires $b_s$ times less number of SVD computations than the KSVD algorithm. Because of the simultaneous updating of atoms belong to the same block.
+As proved in \cite{OMP_KSVD}, K-SVD algorithm has a complexity of $O((ks)^2K + 2NK)$. Because of the block nature of BK-SVD, we expect BK-SVD to have a complexity of $O((k)^2K + 2NK)$, where $k$ is the sparsity level (number of sparse blocks) and $s$ is the maximal block size. The total compexity of combined SAC+BK-SVD is therefore $O((k)^2K + 2NK+K^3)$. Therefore the overall convergence rate of the proposed BSS framework will be slower than simple K-SVD method.\\
+

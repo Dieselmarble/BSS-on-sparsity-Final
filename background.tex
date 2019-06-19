@@ -187,8 +187,6 @@ Such relaxations have led to a wide range of algorithms for signal reconstructio
 Sampling Matching Pursuit) \cite{CoSaMP2008}.
 
 
-
-
 \subsection{Sparsity and morphological Diversity}
 In this section, we provide essential insights into the use of sparsity in BSS and we highlight the central role played by morphological diversity as a way of contrast between the sources.
 
@@ -370,10 +368,6 @@ Estimation $\tilde{\mathbf{A}}$ and $\tilde{\mathbf{S}}$
 \end{algorithm}
 
 
-\subsection{Solve the BSS scale and permutation indeterminacy}
-As mentioned in previous sections, BSS methods suffers from ambiguities that the estimated source can be scaled permuted up to any arbitrary order. The solution to this problem is equivalent to an optimal assignment algorithm. An intuitive methods would be comparing the similarity metric (e.g. Euclidean distance) between every estimated source and the original sources. It is easy to see that the complexity is $O(n^2)$. Unfortunately, the optimal assignment may not, in general, be attained in this way \cite{1261953}. In this report, we employ the Kuhn-Munkres Algorithm (also well-known as the Hungarian Algorithm)
-with a higher complexity $O(n^3)$ (n is the number of channels) but guarantees the optimal assignment to calculate the permutation matrix.
-
 \subsection{Blind source separation based on adaptive dictionary learning}
 In previous sessions, we mentioned about sparse decomposition using prescribed overcomplete dictionaries such as Wavelet, Curvelet or unions of orthonormal transform bases. This method works well when the original sources have components that are largely different from each other in the transform domain. However, this may not lead to the most sparsified decomposition of each individual sources, or in another word, the dictionaries found may not be appropriate in the sense that they may fit better the mixtures rather than the sources.\\
 
@@ -397,11 +391,15 @@ The K-SVD algorithm can be decomposed into two stages, which are executed altern
 where $\mathbf{E}_k$ stands for the residual. 
 In order to force the sparsity in $\mathbf{X}$, we need to extract the columns in $\mathbf{E}_k$ correspond to non-zero elements in $x^k$. That is,
 
-\begin{align} 
+\begin{equation}
+\centering
+\begin{aligned}
     w_k & = \{i| 1 \geq i \leq K, \, x^k(i) \neq 0 \} \\ 
     \Omega_k &= \text{concatenation of N \times $w_k$};\\
     \mathbf{E}_k &= \Omega_k\mathbf{E}_k
-\end{align}
+\end{aligned}
+\end{equation}
+
 Hence we have split the term $\mathbf{\Phi X}$ to $k$ rank-1 matrices. Among those, only the $k^{th}$ atom remains in the question. This is a least square problem that can be directly solved using singular value decomposition (SVD). 
 \begin{equation}
     \mathbf{E}_k = U\Sigma V^T
@@ -437,16 +435,4 @@ Estimation $\hat{\mathbf{A}}$ and $\hat{\mathbf{S}}$.
 \STATE 5. Decrease $\sigma$ until stopping criterion is met. \\
 \end{algorithmic}
 \end{algorithm}
-
-
-\subsection{Further research directions in sparsity based BSS}
-In this section, we point out several challenges in recent blind source separation research, and anticipate the further research directions.\\
-\begin{itemize}
-    \item Dictionary Selection for morphological component analysis was empirical. The prevailing dictionaries include wavelets, discrete cosine, ridgelet, curvelet and their derivatives. Due to the complex nature of images, methodology of selecting appropriate dictionary for different  morphological diversities is critical.
-    \item Develop effective redundant multiscale transformations. The key to MCA dictionary is that the dictionary has a fast way of calculating them. For instance, the sceond generation curvelets transform outperforms the traditional curvelets in terms of speed and comlexity.
-    \item Establish effective numerical optimisation algorithm and improve the convergence of such an algorithm. Most MCA techniques of estimating the mixing matrix $\mathbf{A}$ and $\mathbf{S}$ are based on the iterative thresholding method. Generally, we need to improve the concurrent iterative thresholding methods by enhancing the adaptivity and the convergence rate.
-\end{itemize}
-
-\subsection{Summary of this Section}
-This chapter has considered the BSS methods which will be used in next stage of this project. Firstly, the linear instantaneous model was introduced and BSS assumptions were stated. We then introduced performance metrics to evaluate the performances of various BSS algorithms. The problem was then extended to the case of sparsity where morphological component analysis is discussed. Finally, we foresee the future research trends in morphological component analysis based blind source separation. Inspirations are acquired from the future research trends so that I can propose my own research direction.
 

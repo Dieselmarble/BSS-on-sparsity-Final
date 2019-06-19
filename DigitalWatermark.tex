@@ -16,23 +16,7 @@ In order to improve any parameter in the triangle, there
 must be a trade-off \cite{DCT_watermark}. 
 
 \subsection{Digital Image Watermarking Based on DWT and DCT}
-Discrete cosine transform (DCT) based watermarking methods is the currently most extensive used method in the area of steganography. DCT is a summation of a finite numbers of cosine functions in different frequencies, which represents the identification of processed signal. DCT transformation like
-fourier transform, intends to reduce existed redundancy in the frequency domain.
-
-\subsubsection{DCT Transform}
-
-The equations of two dimensional discrete cosines transform (DCT), And inverse discrete cosine transform (IDCT), are given below in order.
-\begin{align}
-    F(u,v) &= \sqrt{\frac{2}{MN}}C(u)C(v)\sum_{x=0}^{M-1}\sum_{y=1}^{N-1}f(x,y)cos[\frac{\pi}{2N}(2x+1)u]cos[\frac{\pi}{2M}(2(y+1)v)] \\
-    f(u,v) &= \sqrt{\frac{2}{MN}}\sum_{x=0}^{M-1}\sum_{y=1}^{N-1}C(u)C(v) F(x,y)cos[\frac{\pi}{2N}(2x+1)u]cos[\frac{\pi}{2M}(2(y+1)v)]
-\end{align}
-where $M$ and $N$ are sizes of the image. And 
-\begin{align}
-    C(u) = \begin{cases}
-    \frac{1}{\sqrt{2}}, \quad u=0;\\
-    1, u=1,2,...N-1;
-    \end{cases}
-\end{align}
+Discrete cosine transform (DCT) based watermarking methods is the currently most extensive used method in the area of steganography. DCT is a summation of a finite numbers of cosine functions in different frequencies, which represents the identification of processed signal. 
 
 We now describes the circumstance of DCT based watermarking method. We first divide cover image to blocks and calculate DCT transform and preparing a stream from DCT coefficients. Then the watermark DCT coefficients multiplied by $\alpha$ is added to the low frequency coefficients of cover image DCT coefficeitns. $\alpha$ controls the perceptual quality of host image in order to get a powerful watermark in encountering with types of attacks. Finally we can reconstruct the watermarked image by IDCT. To extract the watermark, same procedure is applied as the insertion steps. Besides, the original host image is needed to help us to detect the embedded watermark via comparing coefficients obtained, with coefficients of original image without watermark. \\
 
