@@ -1,6 +1,5 @@
 \section{Background} \label{background}
-\subsection{BSS model} 
-\subsubsection{Instantaneous linear mixture model} \label{bssmodel}
+\subsection{Instantaneous linear mixture model} \label{bssmodel}
 Based on the cocktail party problem introduced in Chapter \ref{intro}, here we extent the idea of blind source separation to a formal mathematical definition. %Before that, we simply the BSS problem by applying the instantaneously linear mixture model.
 The mixing process of the sources in BSS involves many models such as the instantaneous linear mixture model, the nonlinear mixture model and the convolved mixture model \cite{Hxu2014}. The instantaneous linear model omits the time delay of source propagation of reaching different observers. We assume that the instantaneous linear BSS model is adopted throughout this report.\\
 
@@ -18,7 +17,7 @@ The instantaneously linear mixture model states that given $m$ observations $\{x
     \forall i \in \{1, \cdots, m\}, \quad x_i = \sum_{j=1}^n a_{ij}s_j
     \label{sumofs_t}
 \end{equation}
-Figure \ref{Ins_LMM} illustrates the case when we have equal number of sources and observations. Since results are not affected by reciprocal rescaling of $a_{ij}$ and $s_j$. Without loss of generality, the $a_{ij}$ will hitherto assumed to be normalised to unit length. The mixing model can be conveniently rewritten in matrix form
+Figure (\ref{Ins_LMM}) illustrates the case when we have equal number of sources and observations. Since results are not affected by reciprocal rescaling of $a_{ij}$ and $s_j$. Without loss of generality, the $a_{ij}$ will hitherto assumed to be normalised to unit length. The mixing model can be conveniently rewritten in matrix form
 \begin{equation}
     \mathbf{X} = \mathbf{AS} +\mathbf{N}   
     \label{mixing}
@@ -46,7 +45,7 @@ Where $\mathbf{Z^T} = \mathbf{W A}$. The estimation matrix $\mathbf{Y}$ can also
 \end{equation}
 where $\mathbf{D}$ is a diagonal matrix and $\mathbf{P}$ is a permutation matrix that reduces the scale permutation indeterminacy of the mixing model.
 
-\subsubsection{Ambiguities of BSS process}
+\subsection{Ambiguities of BSS process}
 \label{ambiguitiesBSS}
 Because lack of prior knowledge about the sources and mixing process. While estimating the mixing and source matrices, we introduce the diagonal matrix $\mathbf{D}$ and permutation matrix $\mathbf{P}$ in Equation (\ref{permutEQ}), which accounts for the two ambiguities below.\\
 
